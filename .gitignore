@@ -75,7 +75,7 @@ include
 !/src/media/logo-paradox-olivia.png
 !/src/media/logo-mark.png
 !/src/media/email
-/env/
+# /env/
 /nbproject/
 .buildpath
 .project
