@@ -1,0 +1,10 @@
+{
+  "name": "apidoc",
+  "version": "1.0.0",
+  "description": "apidoc system",
+  "author": "thqbop",
+  "license": "ISC",
+  "dependencies": {
+    "apidoc": "0.16.1"
+  }
+}

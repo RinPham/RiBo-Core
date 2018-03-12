@@ -1,0 +1,37 @@
+{% extends "emails/base.html" %}
+{% load email %}
+{% block container %}
+{% body %}
+    Somebody recently asked to reset your VMS PIN.
+
+    To log on to VMS App, use the following credentials:
+
+    Application Key: {{ key }}
+    PIN: {{ pin }}
+
+    --------------
+    copyright 2017 VMS
+{% endbody %}
+
+{% bodyhtml %}
+    <link rel="stylesheet" type="text/css" href="../css/verify.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <div class="paragraph">
+        Hi,
+        <div>
+            Somebody recently asked to reset your VMS PIN.
+            <br><br>
+            <strong>Didn't request this change?</strong>
+            If you didn't request a new PIN, <a href="{{ support_link }}" class="italic underline">let us know immediately</a>
+            <br><br>
+        </div>
+
+        <hr>
+        <div>To log on to VMS App, use the following credentials:<br><br></div>
+        <div>
+            <strong>Application Key:</strong> {{ key }}<br/>
+            <strong>PIN:</strong> {{ pin }}
+        </div>
+    </div>
+{% endbodyhtml %}
+{% endblock container %}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300italic,700,600' rel='stylesheet'
+          type='text/css' data-embed-ignore>
+    <link rel="stylesheet" type="text/css" href="../css/embed.css" data-embed/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+</head>
+<body class="body">
+<div class="header">
+    <table class="table-0p0m container">
+        <tr>
+            <td class="td" align="center">
+                <table class="table-0p0m table-header">
+                    <tr>
+                        <td class="td-0p0m">
+                            <h1>VMS</h1>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table class="table-0p0m container" cellpadding="0" cellspacing="0">
+    <tr>
+        <td class="td-0p0m" align="center" style="text-align: center">
+            <table class="responsive-table" align="center">
+                <tr>
+                    <td class="td-0p0m">
+                        <div class="main-container">
+                            {% block container %}
+                            {% endblock container %}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{% block footer %}
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td align="center" style="padding: 30px;" class="padding-30">
+            <table border="0" cellpadding="0" cellspacing="0" class="responsive-table">
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="padding-copy">
+                                                <span class="appleFooter">
+                                                    &copy; 2017 VMS<br>
+                                                    You received this email because you have registered at our company services.
+                                                </span><br>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock footer %}
+</body>
+</html>

@@ -1,0 +1,142 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    line-height: 100%;
+    background-color: #ffffff;
+    color: #999999;
+    border: 0;
+}
+
+.body {
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial,
+    sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+img {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    text-decoration: none;
+    -ms-interpolation-mode: bicubic;
+    border: none;
+    display: block;
+}
+.paragraph {
+    line-height: 1.6;
+    padding-bottom: 20px;
+}
+.table-0p0m {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.responsive-table {
+    width: 100%;
+    max-width: 700px;
+}
+
+.td-0p0m {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.td-floater {
+    border-collapse: collapse;
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    display: inline-table;
+    float: none;
+}
+
+.header {
+    height: 50px;
+    overflow: hidden;
+    background-color: #ffffff;
+    border-bottom: solid 1px #e4e4e4;
+    color: #222;
+    text-transform: uppercase;
+}
+h1 {
+    font-size: 22px;
+    font-weight: bold;
+}
+.underline {
+    text-decoration: underline;
+}
+.italic {
+    font-style: italic;
+}
+.container {
+    width: 100%;
+}
+.max-width {
+    max-width: 700px;
+}
+
+.main-container {
+    background: #FFF;
+    padding-top: 30px;
+    color: #1d1d26;
+    text-align: left;
+    font-size: 14px;
+}
+.table-header {
+    max-width: 700px;
+}
+
+.content {
+    width: 100%;
+    max-width: 560px;
+}
+.padding-30 {
+    padding: 30px;
+}
+
+.button {
+    padding: 20px 60px;
+    background-color: #6091bc;
+    color:#FFF;
+    text-align: center;
+    display: inline-block;
+}
+
+
+
+.padding-copy {
+    font-size: 12px;
+    line-height: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #999999;
+    text-align: center;
+}
+.appleFooter {
+    text-transform: uppercase;
+}

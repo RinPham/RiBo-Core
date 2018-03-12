@@ -1,0 +1,11 @@
+{ 
+    "name": "thqbop",
+    "version": "1.0.0",
+    "description": "Ribo - Schedule Assistant",
+    "title": "Ribo API",
+    "url": "http://ribo.com/api/v1",
+    "header": {
+        "title": "Using API",
+        "filename": "api_header.md"
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "paths": {
+    "html_source":["emails/*.html"],
+    "tmpl":"../templates/emails",
+    "tmpl_source":["../templates/emails/*.html"],
+    "rendered":"rendered"
+  },
+  "options": {
+    "compiler": {},
+    "builder": {}
+  },
+  "watchs": [
+    {
+      "define":"watch task"
+    }
+  ],
+  "watch": ["./css/*.css", "./emails/*.html", "./data.json"]
+}

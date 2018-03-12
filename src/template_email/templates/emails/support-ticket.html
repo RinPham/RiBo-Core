@@ -1,0 +1,26 @@
+{% extends "emails/base.html" %}
+{% load email %}
+{% block container %}
+
+    {% body %}
+        Hi,
+        We got a new ticket from {{ name }}
+
+        {{ message }}
+
+        --------------
+        Copyright 2017 VMS
+    {% endbody %}
+
+
+    {% bodyhtml %}
+        <div class="paragraph">
+            Hi, <br>
+            We got a new ticket from {{ name }}
+        </div>
+        <br><br>
+        <div class="paragraph">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endbodyhtml %}
+{% endblock container %}

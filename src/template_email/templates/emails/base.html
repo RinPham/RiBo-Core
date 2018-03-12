@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300italic,700,600" rel="stylesheet" type="text/css">
+    <style type="text/css">
+/* Reset styles */
+body {
+    margin: 0 0;
+    padding: 0;
+    min-width: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #f7f7f7;
+}
+
+body, table, td, div, p, a {
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    line-height: 100%;
+}
+
+table, td {
+    mso-table-lspace: 0pt;
+    mso-table-rspace: 0pt;
+    border-collapse: collapse !important;
+    border-spacing: 0;
+}
+
+img {
+    border: 0;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+    -ms-interpolation-mode: bicubic;
+}
+
+#outlook a {
+    padding: 0;
+}
+
+.ReadMsgBody {
+    width: 100%;
+}
+
+.ExternalClass {
+    width: 100%;
+}
+
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+    line-height: 100%;
+}
+
+/* Extra floater space for advanced mail clients only */
+@media all and (max-width: 600px) {
+    .floater {
+        width: 320px;
+    }
+}
+
+/* Set color for auto links (addresses, dates, etc.) */
+a, a:hover {
+    color: #127DB3;
+}
+
+.footer a, .footer a:hover {
+    color: #999999;
+}
+
+</style>
+    
+</head>
+<body class="body" style="-ms-text-size-adjust: 100%; text-size-adjust: 100%; width: 100%; height: 100%; -webkit-font-smoothing: antialiased; border-collapse: collapse; border-spacing: 0; -webkit-text-size-adjust: 100%; line-height: 100%; background-color: #ffffff; color: #999999; border: 0; margin: 0; padding: 0; font-family: Helvetica, Arial,
+    sans-serif; font-size: 13px;">
+<div class="header" style="height: 50px; overflow: hidden; background-color: #ffffff; border-bottom: solid 1px #e4e4e4; color: #222; text-transform: uppercase;">
+    <table class="table-0p0m container" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%;">
+        <tr>
+            <td class="td" align="center">
+                <table class="table-0p0m table-header" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%; max-width: 700px;">
+                    <tr>
+                        <td class="td-0p0m" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;">
+                            <h1 style="font-size: 22px; font-weight: bold;">VMS</h1>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table class="table-0p0m container" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%;">
+    <tr>
+        <td class="td-0p0m" align="center" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; text-align: center;">
+            <table class="responsive-table" align="center" style="width: 100%; max-width: 700px;">
+                <tr>
+                    <td class="td-0p0m" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;">
+                        <div class="main-container" style="background: #FFF; padding-top: 30px; color: #1d1d26; text-align: left; font-size: 14px;">
+                            {% block container %}
+                            {% endblock container %}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{% block footer %}
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td align="center" style="padding: 30px;" class="padding-30">
+            <table border="0" cellpadding="0" cellspacing="0" class="responsive-table" style="width: 100%; max-width: 700px;">
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="padding-copy" style="font-size: 12px; line-height: 16px; font-family: Helvetica, Arial, sans-serif; color: #999999; text-align: center;">
+                                                <span class="appleFooter" style="text-transform: uppercase;">
+                                                    &copy; 2017 VMS<br>
+                                                    You received this email because you have registered at our company services.
+                                                </span><br>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock footer %}
+</body>
+</html>

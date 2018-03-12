@@ -1,0 +1,30 @@
+[
+{
+  "model": "shinobi_api.practiced_number",
+  "pk": 1,
+  "fields": {
+    "content": "123"
+  }
+},
+{
+  "model": "shinobi_api.practiced_number",
+  "pk": 2,
+  "fields": {
+    "content": "456"
+  }
+},
+{
+  "model": "shinobi_api.practiced_number",
+  "pk": 3,
+  "fields": {
+    "content": "789"
+  }
+},
+{
+  "model": "shinobi_api.practiced_number",
+  "pk": 4,
+  "fields": {
+    "content": "012"
+  }
+}
+]

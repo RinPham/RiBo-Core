@@ -1,0 +1,16 @@
+[
+    {
+        "model": "vms_api.Faq",
+        "fields": {
+            "question": "",
+            "answer": "."
+        }
+    },
+    {
+        "model": "vms_api.Faq",
+        "fields": {
+            "question": "",
+            "answer": "Make sure your iPad is connected properly to the internet."
+        }
+    }
+]

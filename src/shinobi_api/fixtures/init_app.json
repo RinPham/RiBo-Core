@@ -1,0 +1,13 @@
+[
+    {
+        "model": "vms_api.SystemMeta",
+        "fields": {
+            "version": "v0.0.1",
+            "version_name": "VMS: Innovative Visitor Management Solutions",
+            "changes": "-New layout\n -New features",
+            "available_at": "2016-10-20",
+            "is_latest": 1,
+            "is_force_updated": 1
+        }
+    }
+]
