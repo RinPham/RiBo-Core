@@ -1,0 +1,94 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+node_modules
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Packaging files:
+*.egg*
+
+# Sphinx docs:
+build
+
+# SQLite3 database files:
+*.db
+*.sqlite3
+*.sqlite
+
+# Logs:
+*.log
+
+# Environment variables
+local.env
+
+# Django stuff:
+*.mo
+*.pot
+
+# Eclipse
+.project
+.pydevproject
+.settings
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+
+# Rope
+.ropeproject
+
+# Mac
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+#virtualenv
+bin
+lib
+local
+include
+
+# Project settings
+./site/
+/src/media/*
+!/src/media/index.html
+!/src/media/avatar-default.jpg
+!/src/media/logo-default.png
+!/src/media/jwplayer7.flash.swf
+!/src/media/logo-white.png
+!/src/media/olivia.jpg
+!/src/media/olivia-logo.png
+!/src/media/logo-paradox-olivia.png
+!/src/media/logo-mark.png
+!/src/media/email
+/env/
+/nbproject/
+.buildpath
+.project
+/.settings/
+/.idea
+/ai/nbproject/private
+/src/profiles/migrations/0001_initial.py
+/src/public/utils.py
+
+# Static cache
+/src/static/cache/*
+
+#Config file
+config.env
+*.sh
+pyvenv.cfg
