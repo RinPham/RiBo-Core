@@ -36,6 +36,5 @@ scipy
 geopy
 mongoengine
 django-rest-framework-mongoengine
-lxml
-beautifulsoup4
-opencv-python
+google-api-python-client
+nltk==3.2.5

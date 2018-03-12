@@ -1,1 +1,0 @@
-from shinobi_api.beanstalk_jobs.email import *
