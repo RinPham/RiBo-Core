@@ -1,12 +1,4 @@
-#! /usr/bin/python
-
-#
-# Copyright (C) 2017 CG Vietnam, Inc
-#
-# @link http://www.codeographer.com/
-#
 from mongoengine import Document,EmbeddedDocument,fields
-from ribo_api.models.element import Element
 
 class Page(Document):
     url = fields.StringField(required=True)

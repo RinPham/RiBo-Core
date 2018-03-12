@@ -178,7 +178,7 @@ USE_L10N = False
 USE_TZ = True
 
 # Authentication Settings
-# AUTH_USER_MODEL = 'ribo_api.User'  # 'authtools.User'
+AUTH_USER_MODEL = 'ribo_api.User'  # 'authtools.User'
 
 
 BEANSTALK_SERVER = env('BEANSTALK_HOST') + ':' + env('BEANSTALK_PORT')
