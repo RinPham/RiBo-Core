@@ -145,8 +145,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'ribo_api.authentications.TokenAuthentication'
-        'rest_framework.authentication.BasicAuthentication'
+        'ribo_api.authentications.TokenAuthentication'
     ],
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'EXPIRED_FOREVER': '2000-10-10 00:00:00'

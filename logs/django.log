@@ -1247,3 +1247,341 @@ mongoengine.errors.ValidationError: ValidationError (User:None) (Field is requir
 [13/Mar/2018 17:58:53] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
 [13/Mar/2018 17:58:53] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
 [13/Mar/2018 17:58:53] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 13:35:34] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 13:35:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 13:35:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.009) SHOW FULL TABLES; args=None
+[14/Mar/2018 13:35:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.014) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:26:20] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:26:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:26:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.011) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:26:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.012) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:26:45] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:26:46] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:26:46] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:26:46] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:27:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:27:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:27:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:27:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:27:59] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:28:00] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:28:00] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:28:00] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:28:26] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:28:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:28:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:28:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:38:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:39:00] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:39:26] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:39:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:39:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.008) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:39:27] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.009) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:42:04] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:42:05] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:42:05] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.004) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:42:05] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:43:48] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:43:48] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:43:48] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:43:48] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:44:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:44:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:44:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:44:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:47:42] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 466, in to_mongo
+    return ObjectId(six.text_type(value))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 110, in __init__
+    self.__validate(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 206, in __validate
+    _raise_invalid_id(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 52, in _raise_invalid_id
+    " or a 24-character hex string" % oid)
+bson.errors.InvalidId: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 61, in list
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 58, in list
+    return Response(serializer.data)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 674, in data
+    ret = super(ListSerializer, self).data
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in to_representation
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 99, in _iter_results
+    self._populate_cache()
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 118, in _populate_cache
+    self._result_cache.append(next(self))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1466, in __next__
+    raw_doc = next(self._cursor)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1547, in _cursor
+    self._cursor_obj = self._collection.find(self._query,
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1590, in _query
+    self._mongo_query = self._query_obj.to_query(self._document)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 89, in to_query
+    query = query.accept(QueryCompilerVisitor(document))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 155, in accept
+    return visitor.visit_query(self)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 78, in visit_query
+    return transform.query(self.document, **query.query)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/transform.py", line 98, in query
+    value = field.prepare_query_value(op, value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 473, in prepare_query_value
+    return self.to_mongo(value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 469, in to_mongo
+    self.error(six.text_type(e))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 167, in error
+    raise ValidationError(message, errors=errors, field_name=field_name)
+mongoengine.errors.ValidationError: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+[14/Mar/2018 14:48:11] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 466, in to_mongo
+    return ObjectId(six.text_type(value))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 110, in __init__
+    self.__validate(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 206, in __validate
+    _raise_invalid_id(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 52, in _raise_invalid_id
+    " or a 24-character hex string" % oid)
+bson.errors.InvalidId: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 61, in list
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 58, in list
+    return Response(serializer.data)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 674, in data
+    ret = super(ListSerializer, self).data
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in to_representation
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 99, in _iter_results
+    self._populate_cache()
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 118, in _populate_cache
+    self._result_cache.append(next(self))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1466, in __next__
+    raw_doc = next(self._cursor)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1547, in _cursor
+    self._cursor_obj = self._collection.find(self._query,
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1590, in _query
+    self._mongo_query = self._query_obj.to_query(self._document)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 89, in to_query
+    query = query.accept(QueryCompilerVisitor(document))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 155, in accept
+    return visitor.visit_query(self)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 78, in visit_query
+    return transform.query(self.document, **query.query)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/transform.py", line 98, in query
+    value = field.prepare_query_value(op, value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 473, in prepare_query_value
+    return self.to_mongo(value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 469, in to_mongo
+    self.error(six.text_type(e))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 167, in error
+    raise ValidationError(message, errors=errors, field_name=field_name)
+mongoengine.errors.ValidationError: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+[14/Mar/2018 14:48:41] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:48:43] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:48:43] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.006) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:48:43] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.007) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:54:38] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 466, in to_mongo
+    return ObjectId(six.text_type(value))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 110, in __init__
+    self.__validate(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 206, in __validate
+    _raise_invalid_id(oid)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/bson/objectid.py", line 52, in _raise_invalid_id
+    " or a 24-character hex string" % oid)
+bson.errors.InvalidId: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 60, in list
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 57, in list
+    return Response(serializer.data)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 674, in data
+    ret = super(ListSerializer, self).data
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 239, in data
+    self._data = self.to_representation(self.instance)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in to_representation
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/serializers.py", line 614, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 99, in _iter_results
+    self._populate_cache()
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/queryset.py", line 118, in _populate_cache
+    self._result_cache.append(next(self))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1466, in __next__
+    raw_doc = next(self._cursor)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1547, in _cursor
+    self._cursor_obj = self._collection.find(self._query,
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 1590, in _query
+    self._mongo_query = self._query_obj.to_query(self._document)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 89, in to_query
+    query = query.accept(QueryCompilerVisitor(document))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 155, in accept
+    return visitor.visit_query(self)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/visitor.py", line 78, in visit_query
+    return transform.query(self.document, **query.query)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/transform.py", line 98, in query
+    value = field.prepare_query_value(op, value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 473, in prepare_query_value
+    return self.to_mongo(value)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 469, in to_mongo
+    self.error(six.text_type(e))
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/base/fields.py", line 167, in error
+    raise ValidationError(message, errors=errors, field_name=field_name)
+mongoengine.errors.ValidationError: '' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string
+[14/Mar/2018 14:56:20] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 208, in delete
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 203, in delete
+    task = Task.objects(id = data.get('id', None))[0]
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 197, in __getitem__
+    queryset._cursor[key],
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/pymongo/cursor.py", line 613, in __getitem__
+    raise IndexError("no such item for Cursor instance")
+IndexError: no such item for Cursor instance
+[14/Mar/2018 14:57:17] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:57:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:57:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.006) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:57:19] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.006) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:57:35] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 209, in delete
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 204, in delete
+    task = Task.objects(id = pk)[0]
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 197, in __getitem__
+    queryset._cursor[key],
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/pymongo/cursor.py", line 613, in __getitem__
+    raise IndexError("no such item for Cursor instance")
+IndexError: no such item for Cursor instance
+[14/Mar/2018 14:59:20] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:59:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 14:59:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.003) SHOW FULL TABLES; args=None
+[14/Mar/2018 14:59:22] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 14:59:36] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:01:59] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:02:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:02:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:02:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 15:02:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 15:02:42] ERROR [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py:284] Internal Server Error: /api/v1/task
+Traceback (most recent call last):
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 149, in get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/core/handlers/base.py", line 147, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/viewsets.py", line 87, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 466, in dispatch
+    response = self.handle_exception(exc)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/rest_framework/views.py", line 463, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 209, in delete
+    raise e
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/src/ribo_api/views/api/task.py", line 204, in delete
+    task = Task.objects(id = pk)[0]
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/mongoengine/queryset/base.py", line 197, in __getitem__
+    queryset._cursor[key],
+  File "/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/pymongo/cursor.py", line 613, in __getitem__
+    raise IndexError("no such item for Cursor instance")
+IndexError: no such item for Cursor instance
+[14/Mar/2018 15:02:49] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:02:49] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:02:49] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 15:02:49] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 15:03:34] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:04:56] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:04:57] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:04:57] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.005) SHOW FULL TABLES; args=None
+[14/Mar/2018 15:04:57] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.008) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 15:05:09] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:05:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:05:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 15:05:10] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[14/Mar/2018 15:05:37] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()

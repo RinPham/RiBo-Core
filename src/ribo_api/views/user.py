@@ -1,15 +1,10 @@
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.translation import ugettext_lazy as _
-from rest_framework import exceptions
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ribo_api import permissions
 from ribo_api.models.user import User
 from ribo_api.serializers import UserSerializer
+from ribo_api.services.api import ApiService
 from ribo_api.services.utils import Utils
 
 
@@ -60,13 +55,15 @@ class UserViewSet(ViewSet):
             data = request.data.copy()
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            user = serializer.save()
+            ApiService.create_token(user_id=user.id,api_data=data)
             return Response(serializer.data)
         except Exception as e:
             Utils.log_exception(e)
             raise e
 
-    def update(self, request, *args, **kwargs):
+    @list_route(methods=['put'])
+    def edit(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
         @api {PUT} /user update user

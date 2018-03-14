@@ -1,10 +1,12 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from ribo_api.views import UserViewSet
+from ribo_api.views.api.task import TaskViewSet
 
 router = routers.SimpleRouter(trailing_slash=False)
 
 router.register(r'user', UserViewSet, base_name='UserView')
+router.register(r'task', TaskViewSet, base_name='TaskView')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
