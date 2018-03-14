@@ -34,60 +34,6 @@ class IsAuthenticated(permissions.BasePermission):
         method = method + "_" + view_set
         return method
 
-class IsManager(IsAuthenticated):
-    """
-    Only manager can fire this action
-    """
-
-    def has_permission(self, request, view):
-        has_permission = super(IsManager, self).has_permission(request, view)
-        if has_permission:
-            return request.user.is_manager
-        return False
-
-class IsVisitor(IsAuthenticated):
-    """
-    Only visitor can fire this action
-    """
-    exceptions = ['post_visitor_auth']
-
-    def has_permission(self, request, view):
-        if self.get_action(request, view) in self.exceptions:
-            return True
-        if super(IsVisitor, self).has_permission(request, view):
-            return request.user.is_guest
-        return False
-
-
-class IsSuperuser(permissions.BasePermission):
-    """
-    Only staff can access this are
-    """
-
-    def has_permission(self, request, view):
-        if request.user and request.user.is_authenticated():
-            return request.user.is_superuser
-
-
-class IsStaff(permissions.BasePermission):
-    """
-    Only staff can access this are
-    """
-
-    def has_permission(self, request, view):
-        if request.user and request.user.is_authenticated():
-            return request.user.is_staff or request.user.is_superuser
-
-
-class NotAuthenticated(permissions.BasePermission):
-    """
-    Global check permission, only non login can access
-    """
-
-    def has_permission(self, request, view):
-        return (not request.user or not request.user.is_authenticated())
-
-
 def allow_access_user(current, user, raise_exception=True):
     """
     Check current user can access user data

@@ -1,0 +1,1 @@
+from ribo_api.views.user import UserViewSet

@@ -142,9 +142,11 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         # 'ribo_api.permissions.IsAuthenticated'
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'ribo_api.authentications.TokenAuthentication'
+        'rest_framework.authentication.BasicAuthentication'
     ],
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'EXPIRED_FOREVER': '2000-10-10 00:00:00'
@@ -178,7 +180,7 @@ USE_L10N = False
 USE_TZ = True
 
 # Authentication Settings
-AUTH_USER_MODEL = 'ribo_api.User'  # 'authtools.User'
+# AUTH_USER_MODEL = 'ribo_api.User'  # 'authtools.User'
 
 
 BEANSTALK_SERVER = env('BEANSTALK_HOST') + ':' + env('BEANSTALK_PORT')
