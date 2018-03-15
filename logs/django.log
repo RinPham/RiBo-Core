@@ -1585,3 +1585,19 @@ IndexError: no such item for Cursor instance
 [14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
 [14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
 [14/Mar/2018 15:05:38] DEBUG [/media/thqbop/data/Hoctap/NNLaptrinh/Python/Projects/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[15/Mar/2018 03:00:51] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 03:00:52] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 03:00:52] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SHOW FULL TABLES; args=None
+[15/Mar/2018 03:00:52] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[15/Mar/2018 04:38:25] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 04:38:26] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 04:38:26] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.001) SHOW FULL TABLES; args=None
+[15/Mar/2018 04:38:26] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[15/Mar/2018 05:04:16] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 05:04:16] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 05:04:16] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SHOW FULL TABLES; args=None
+[15/Mar/2018 05:04:16] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+[15/Mar/2018 05:04:25] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 05:04:25] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+[15/Mar/2018 05:04:25] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SHOW FULL TABLES; args=None
+[15/Mar/2018 05:04:25] DEBUG [/home/thqbop/workspace/Ribo/RiBo-Core/env/lib/python3.5/site-packages/django/db/backends/utils.py:89] (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()

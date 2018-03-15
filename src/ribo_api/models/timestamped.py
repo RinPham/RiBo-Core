@@ -4,7 +4,8 @@ from django.utils import timezone
 class TimeStampedModel(Document):
     created_at = fields.DateTimeField(default=timezone.now)
     updated_at = fields.DateTimeField(default=timezone.now)
-    
+
+    meta = {'abstract': True}
+
     class Meta:
-        abstract = True
         app_label = 'no_sql'
