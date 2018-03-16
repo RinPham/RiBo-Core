@@ -1,41 +1,21 @@
-from datetime import datetime, timedelta
+import json
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from ribo_api.models import Api
 from ribo_api.serializers.api import ApiSerializer
+from ribo_api.serializers.user import UserSerializer
 from ribo_api.services.base import *
-from ribo_api.const import DeviceType
-from ribo_api.services.utils import Utils
+from ribo_api.services.user import UserService
 
 User = get_user_model()
-
 
 class ApiError(TypeError): pass  # base exception class
 
 
-def is_browser(type):
-    return type == DeviceType.DESKTOP_WEB or type == DeviceType.MOBILE_WEB
-
-
-def is_mobile_app(type):
-    return not is_browser(type)
-
-
-def set_client_data(api_obj, data):
-    for key in ['device', 'ip', 'app_id', 'version', 'type']:
-        setattr(api_obj, key, data.get(key))
-    if 'user_id' in data:
-        api_obj.user = data['user_id']
-    if 'expire_time' in data:
-        api_obj.expired_at = data['expire_time']
-    return api_obj
-
-
 class ApiService(BaseService):
     @classmethod
-    def create_token(cls, user_id, api_data, **kwargs):
+    def create_token(cls, json_data, **kwargs):
         """
         Create a token object
         :param user_id:
@@ -45,9 +25,32 @@ class ApiService(BaseService):
         :return:
         """
         try:
+            api_data = {}
+            data = json.loads(json_data)
+            email = data['id_token'].get('email', None)
+            user = UserService.get_user_by_email(email)
+            if not user:
+                data_user = {
+                    'email': email,
+                    'first_name': data['id_token'].get('given_name', None),
+                    'last_name': data['id_token'].get('family_name', None),
+                    'avatar': data['id_token'].get('picture', None),
+                }
+                user_serializer = UserSerializer(data=data_user)
+                user_serializer.is_valid(raise_exception=True)
+                user = user_serializer.save()
+            api_data['access_token'] = data.get('access_token','')
+            api_data['refresh_token'] = data.get('refresh_token', '')
+            api_data['json'] = json_data
+            api_data['user_id'] = user.id
             serializer = ApiSerializer(data = api_data)
             serializer.is_valid(raise_exception=True)
-            return serializer.save()
+            token = serializer.save()
+            data = {
+                'token': ApiSerializer(token).data,
+                'user': UserSerializer(user).data
+            }
+            return data
         except Exception as e:
             raise e
 

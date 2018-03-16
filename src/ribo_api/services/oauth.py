@@ -25,17 +25,26 @@ class OauthService(BaseService):
         except:
             return None
 
-    def get_authorize_url(redirect_uri):
+    @classmethod
+    def get_flow(cls, redirect_uri):
         client_id = settings.GOOGLE_CLIENT_ID
         client_secret = settings.GOOGLE_CLIENT_SECRET
         scopes = ['https://www.googleapis.com/auth/userinfo.email',
-                  'https://www.googleapis.com/auth/calendar']
+                  'https://www.googleapis.com/auth/calendar',
+                  'https://www.googleapis.com/auth/userinfo.profile']
         flow = OAuth2WebServerFlow(client_id, client_secret, scopes, redirect_uri=redirect_uri)
         flow.params['access_type'] = 'offline'
         flow.params['prompt'] = 'consent'
+        return flow
+
+    @classmethod
+    def get_authorize_url(cls, redirect_uri):
+        flow = cls.get_flow(redirect_uri)
         return flow.step1_get_authorize_url()
 
+    @classmethod
+    def get_credentials(cls, auth_code, redirect_uri):
+        flow = cls.get_flow(redirect_uri)
+        credentials = flow.step2_exchange(auth_code)
+        return credentials
 
-if __name__ == '__main__':
-    access_token = input('access token:')
-    service = OauthService._get_service(access_token=access_token, user_agent='myAgent/2.0')

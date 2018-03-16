@@ -11,10 +11,6 @@ class Api(TimeStampedModel):
     refresh_token = fields.StringField(required=True)
     json = fields.StringField(default=None)
     user_id = fields.ObjectIdField(required=True)
-    device = fields.StringField(max_length=64)
-    version = fields.StringField(max_length=40)
-    type = fields.IntField(default=0)
-    app_id = fields.StringField(max_length=64, default='')
 
     class Meta:
         db_table = 'ribo_apis'

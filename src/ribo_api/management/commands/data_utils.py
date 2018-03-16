@@ -54,7 +54,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options.get('url_login'):
-            redirect_uri = 'http://localhost:8888/api/v1/user/get_token'
+            redirect_uri = Utils.get_public_url('/api/v1/auth/token')
             url = OauthService.get_authorize_url(redirect_uri)
             print(url)
 
