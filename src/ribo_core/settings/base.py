@@ -196,6 +196,9 @@ LOGFILE_ROOT = join(dirname(BASE_DIR), 'logs')
 
 GOOGLE_API_KEY_SERVER = env("GOOGLE_API_KEY_SERVER", default='')
 
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default='310203758762-vkc9hocnecbbcshsgf2ufctttp74pbgm.apps.googleusercontent.com')
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default='dm5eWHh7qNq1YvfpOY6NEfrG')
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
