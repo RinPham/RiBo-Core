@@ -9,6 +9,7 @@ from ribo_api.services.utils import Utils
 
 
 class AuthViewSet(ViewSet):
+    permission_classes = ()
 
     @list_route(methods=['get'])
     def token(self, request, *args, **kwargs):

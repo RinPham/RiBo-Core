@@ -1,6 +1,7 @@
 from ribo_api.serializers.user import UserSerializer
 from ribo_api.serializers.task import TaskSerializer
 from ribo_api.serializers.api import ApiSerializer
+from ribo_api.serializers.event import EventSerializer
 from rest_framework import serializers
 
 class ClientSerializer(serializers.Serializer):

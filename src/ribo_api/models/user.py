@@ -10,3 +10,10 @@ class User(Document):
 
     class Meta():
         app_label = 'no_sql'
+
+    def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
+        return True

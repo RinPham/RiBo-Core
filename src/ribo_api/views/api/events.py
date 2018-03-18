@@ -1,15 +1,20 @@
+from rest_framework import status
+from oauth2client.client import AccessTokenCredentialsError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from ribo_api import permissions
+from ribo_api.exceptions import TokenExpired
 from ribo_api.models.task import Task
 from ribo_api.models.user import User
-from ribo_api.serializers.task import TaskSerializer
+from ribo_api.serializers.event import EventSerializer
+from ribo_api.services.oauth import OauthService
 from ribo_api.services.utils import Utils
 
 
 class EventViewSet(ViewSet):
     view_set = 'event'
-    serializer_class = E
+    serializer_class = EventSerializer
 
     def list(self, request, *args, **kwargs):
         """
@@ -51,12 +56,13 @@ class EventViewSet(ViewSet):
         @apiSuccess {object} user
         """
         try:
-            user_id = request.GET.get('user_id','')
-            tasks = Task.objects(user_id=user_id)
-            serializer = self.serializer_class(tasks, many=True)
-            return Response(serializer.data)
+            user = self.request.user
+            service = OauthService._get_service(user.id)
+            items = service.events().list(calendarId='primary', singleEvents=True, orderBy='startTime').execute()
+            return Response(items)
+        except AccessTokenCredentialsError as e:
+            raise TokenExpired()
         except Exception as e:
-            Utils.log_exception(e)
             raise e
 
     def create(self, request, *args, **kwargs):
@@ -99,12 +105,28 @@ class EventViewSet(ViewSet):
         @apiSuccess {object} user
         """
         try:
+            user = self.request.user
+            service = OauthService._get_service(user.id)
             data = request.data.copy()
-            data['intent_id'] = "5aa810bfe3d8ee4f97613dfa"
-            serializer = self.serializer_class(data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+            timezone = data.get("timezone", "UTC")
+            event = {
+                'summary': data.get('summary',None),
+                'location': data.get('location',None),
+                'description': data.get('description',None),
+                'start': {
+                    'dateTime': data.get('start_time',None),
+                    'timeZone': timezone,
+                },
+                'end': {
+                    'dateTime': data.get('end_time',None),
+                    'timeZone': timezone,
+                },
+                'reminders': {
+                    'useDefault': False,
+                },
+            }
+            event = service.events().insert(calendarId='primary', body=event).execute()
+            return Response(event)
         except Exception as e:
             Utils.log_exception(e)
             raise e
@@ -149,12 +171,32 @@ class EventViewSet(ViewSet):
         @apiSuccess {object} user
         """
         try:
+            user = self.request.user
+            service = OauthService._get_service(user.id)
             data = request.data.copy()
-            task = Task.objects(id = data.get('id', None))[0]
-            serializer = self.serializer_class(task, data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+            timezone = data.get("timezone", "UTC")
+            event_id = kwargs.get("pk",None)
+            if event_id:
+                event = {
+                    'summary': data.get('summary', None),
+                    'location': data.get('location', None),
+                    'description': data.get('description', None),
+                    'start': {
+                        'dateTime': data.get('start_time', None),
+                        'timeZone': timezone,
+                    },
+                    'end': {
+                        'dateTime': data.get('end_time', None),
+                        'timeZone': timezone,
+                    },
+                    'reminders': {
+                        'useDefault': False,
+                    },
+                }
+                event = service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
+                return Response(event)
+            else:
+                return Response("Event id is wrong!", status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             Utils.log_exception(e)
             raise e
@@ -199,13 +241,12 @@ class EventViewSet(ViewSet):
         @apiSuccess {object} user
         """
         try:
-            data = request.data.copy()
-            pk = data.get('id', None)
-            task = Task.objects(id = pk)
-            if len(task) == 0:
-                return Response("Id is wrong!", status=404)
-            task.delete()
-            return Response("Success")
+            user = self.request.user
+            service = OauthService._get_service(user.id)
+            event_id = kwargs.get("pk",None)
+            if event_id:
+                service.events().delete(calendarId='primary',  eventId=event_id).execute()
+                return Response("Deleted")
         except Exception as e:
             Utils.log_exception(e)
             raise e

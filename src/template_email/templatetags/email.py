@@ -1,5 +1,5 @@
 from django.template import Library, Node
-from shinobi_api.services.utils import Utils
+from ribo_api.services.utils import Utils
 
 register = Library()
 

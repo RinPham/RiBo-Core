@@ -90,6 +90,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'ribo_api.authentications.TokenAuthentication'
 ]
 
 ROOT_URLCONF = 'ribo_core.urls'
@@ -141,8 +142,8 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'ribo_api.permissions.IsAuthenticated'
-        'rest_framework.permissions.AllowAny'
+        'ribo_api.permissions.IsAuthenticated'
+        # 'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'ribo_api.authentications.TokenAuthentication'

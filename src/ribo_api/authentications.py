@@ -51,8 +51,8 @@ class TokenAuthentication(authentication.BaseAuthentication):
 
     def authenticate_credentials(self, key, request):
         try:
-            token = self.model.objects(token=key)
-            user = User.objects(id=token.user_id)
+            token = self.model.objects(token=key)[0]
+            user = User.objects(id=token.user_id)[0]
         except Exception as e:
             raise AuthenticationFailed(_('Invalid request token.'))
 

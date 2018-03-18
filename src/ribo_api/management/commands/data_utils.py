@@ -11,6 +11,8 @@ from subprocess import call
 from os.path import dirname
 from django.contrib.auth import get_user_model
 
+from ribo_api.exceptions import TokenExpired
+from ribo_api.services.api import ApiService
 from ribo_api.services.oauth import OauthService
 
 User = get_user_model()
@@ -41,6 +43,16 @@ class Command(BaseCommand):
                             action='store_true',
                             default=False,
                             help='get url login google')
+
+        parser.add_argument('-create_token',
+                            action='store_true',
+                            default=False,
+                            help='save token')
+
+        parser.add_argument('-get_credential',
+                            action='store_true',
+                            default=False,
+                            help='save token')
         
     def _run_command(self,*args, **kwargs):
         BASE_DIR = dirname(dirname(dirname(dirname(__file__))))
@@ -76,12 +88,29 @@ class Command(BaseCommand):
 
 
         if options.get('get_event_list'):
-            access_token = input("Enter access token: ")
-            service = OauthService._get_service(access_token,'myAgent')
+            user_id = input("Enter user id: ")
+            service = OauthService._get_service(user_id)
             try:
                 items = service.events().list(calendarId='primary', singleEvents=True, orderBy='startTime').execute()
                 print(items)
             except AccessTokenCredentialsError as e:
-                raise e
+                raise TokenExpired()
             except Exception as e:
                 raise e
+
+        if options.get('create_token'):
+            json = input("Enter json: ")
+            try:
+                data = ApiService.create_token(json)
+                print(data)
+            except Exception as e:
+                raise e
+
+        if options.get('get_credential'):
+            code = input('Enter authentication code: ')
+            try:
+                redirect_uri = Utils.get_public_url('/api/v1/auth/token')
+                credentials = OauthService.get_credentials(code, redirect_uri)
+                print(credentials)
+            except Exception as e:
+                pass
