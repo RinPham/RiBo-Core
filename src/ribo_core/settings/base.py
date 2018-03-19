@@ -65,7 +65,8 @@ DJANGO_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'storages',
-    'django_q'
+    'django_q',
+    'django.contrib.staticfiles'
     #'easy_thumbnails',
 )
 
