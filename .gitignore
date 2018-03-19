@@ -88,6 +88,8 @@ include
 # Static cache
 /src/static/cache/*
 
+/src/docs/
+
 #Config file
 config.env
 *.sh

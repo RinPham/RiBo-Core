@@ -19,41 +19,83 @@ class EventViewSet(ViewSet):
     def list(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {POST} /user Create new user
-        @apiName Create
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {GET} /event Get event list
+        @apiName EventList
+        @apiGroup Ribo_api Event
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
-
-        @apiSuccess {object} user
+        @apiSuccess {object} event
+        @apiSuccessExample {json}
+        {
+            "kind": "calendar#events",
+            "updated": "2018-03-18T09:28:21.270Z",
+            "etag": "\"p33oanr5iovqti0g\"",
+            "summary": "thqbop@gmail.com",
+            "items": [
+                {
+                    "kind": "calendar#event",
+                    "creator": {
+                        "email": "thqbop1@gmail.com"
+                    },
+                    "iCalUID": "24m6ps5v1vtardfihidsb1nsig@google.com",
+                    "reminders": {
+                        "useDefault": true
+                    },
+                    "attachments": [
+                        {
+                            "title": "IMG_2726.JPG",
+                            "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png",
+                            "fileId": "1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1",
+                            "fileUrl": "https://drive.google.com/file/d/1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1/view?usp=drive_web"
+                        }
+                    ],
+                    "etag": "\"3042179875790000\"",
+                    "summary": "Abc222",
+                    "attendees": [
+                        {
+                            "self": true,
+                            "displayName": "Hàn Quốc Trương",
+                            "responseStatus": "accepted",
+                            "email": "thqbop@gmail.com"
+                        },
+                        {
+                            "organizer": true,
+                            "responseStatus": "accepted",
+                            "email": "thqbop1@gmail.com"
+                        }
+                    ],
+                    "status": "confirmed",
+                    "end": {
+                        "dateTime": "2018-03-12T14:00:00+07:00"
+                    },
+                    "updated": "2018-03-15T04:58:57.895Z",
+                    "sequence": 0,
+                    "htmlLink": "https://www.google.com/calendar/event?eid=MjRtNnBzNXYxdnRhcmRmaWhpZHNiMW5zaWcgdGhxYm9wQG0",
+                    "start": {
+                        "dateTime": "2018-03-12T11:30:00+07:00"
+                    },
+                    "created": "2018-03-15T04:16:32.000Z",
+                    "organizer": {
+                        "email": "thqbop1@gmail.com"
+                    },
+                    "id": "24m6ps5v1vtardfihidsb1nsig"
+                },
+            ],
+            "accessRole": "owner",
+            "timeZone": "Asia/Saigon",
+            "defaultReminders": [
+                {
+                    "method": "popup",
+                    "minutes": 30
+                }
+            ]
+        }
         """
         try:
             user = self.request.user
@@ -68,41 +110,74 @@ class EventViewSet(ViewSet):
     def create(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {POST} /user Create new user
-        @apiName Create
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {POST} /event Create event
+        @apiName EventCreate
+        @apiGroup Ribo_api Event
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
+        @apiParam {string} summary title event
+        @apiParam {string} description
+        @apiParam {string} location
+        @apiParam {datetime} start_time format '2018-03-18T09:00:00+07:00'
+        @apiParam {datetime} end_time format '2018-03-18T09:00:00+07:00'
+        ....
 
-        @apiSuccess {object} user
+        @apiSuccess {object} event
+        @apiSuccessExample {json}
+        {
+            "kind": "calendar#event",
+            "creator": {
+                "email": "thqbop1@gmail.com"
+            },
+            "iCalUID": "24m6ps5v1vtardfihidsb1nsig@google.com",
+            "reminders": {
+                "useDefault": true
+            },
+            "attachments": [
+                {
+                    "title": "IMG_2726.JPG",
+                    "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png",
+                    "fileId": "1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1",
+                    "fileUrl": "https://drive.google.com/file/d/1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1/view?usp=drive_web"
+                }
+            ],
+            "etag": "\"3042179875790000\"",
+            "summary": "Abc222",
+            "attendees": [
+                {
+                    "self": true,
+                    "displayName": "Hàn Quốc Trương",
+                    "responseStatus": "accepted",
+                    "email": "thqbop@gmail.com"
+                },
+                {
+                    "organizer": true,
+                    "responseStatus": "accepted",
+                    "email": "thqbop1@gmail.com"
+                }
+            ],
+            "status": "confirmed",
+            "end": {
+                "dateTime": "2018-03-12T14:00:00+07:00"
+            },
+            "updated": "2018-03-15T04:58:57.895Z",
+            "sequence": 0,
+            "htmlLink": "https://www.google.com/calendar/event?eid=MjRtNnBzNXYxdnRhcmRmaWhpZHNiMW5zaWcgdGhxYm9wQG0",
+            "start": {
+                "dateTime": "2018-03-12T11:30:00+07:00"
+            },
+            "created": "2018-03-15T04:16:32.000Z",
+            "organizer": {
+                "email": "thqbop1@gmail.com"
+            },
+            "id": "24m6ps5v1vtardfihidsb1nsig"
+        }
         """
         try:
             user = self.request.user
@@ -134,41 +209,74 @@ class EventViewSet(ViewSet):
     def update(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {PUT} /user update user
-        @apiName update
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {PUT} /event/:id Edit event
+        @apiName EventEdit
+        @apiGroup Ribo_api Event
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
+        @apiParam {string} summary title event
+        @apiParam {string} description
+        @apiParam {string} location
+        @apiParam {datetime} start_time format '2018-03-18T09:00:00+07:00'
+        @apiParam {datetime} end_time format '2018-03-18T09:00:00+07:00'
+        ....
 
-        @apiSuccess {object} user
+        @apiSuccess {object} event
+        @apiSuccessExample {json}
+        {
+            "kind": "calendar#event",
+            "creator": {
+                "email": "thqbop1@gmail.com"
+            },
+            "iCalUID": "24m6ps5v1vtardfihidsb1nsig@google.com",
+            "reminders": {
+                "useDefault": true
+            },
+            "attachments": [
+                {
+                    "title": "IMG_2726.JPG",
+                    "iconLink": "https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png",
+                    "fileId": "1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1",
+                    "fileUrl": "https://drive.google.com/file/d/1SOkB6uHsdfXmn2oY31D5g0t_0P6Wqzn1/view?usp=drive_web"
+                }
+            ],
+            "etag": "\"3042179875790000\"",
+            "summary": "Abc222",
+            "attendees": [
+                {
+                    "self": true,
+                    "displayName": "Hàn Quốc Trương",
+                    "responseStatus": "accepted",
+                    "email": "thqbop@gmail.com"
+                },
+                {
+                    "organizer": true,
+                    "responseStatus": "accepted",
+                    "email": "thqbop1@gmail.com"
+                }
+            ],
+            "status": "confirmed",
+            "end": {
+                "dateTime": "2018-03-12T14:00:00+07:00"
+            },
+            "updated": "2018-03-15T04:58:57.895Z",
+            "sequence": 0,
+            "htmlLink": "https://www.google.com/calendar/event?eid=MjRtNnBzNXYxdnRhcmRmaWhpZHNiMW5zaWcgdGhxYm9wQG0",
+            "start": {
+                "dateTime": "2018-03-12T11:30:00+07:00"
+            },
+            "created": "2018-03-15T04:16:32.000Z",
+            "organizer": {
+                "email": "thqbop1@gmail.com"
+            },
+            "id": "24m6ps5v1vtardfihidsb1nsig"
+        }
         """
         try:
             user = self.request.user
@@ -196,7 +304,7 @@ class EventViewSet(ViewSet):
                 event = service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
                 return Response(event)
             else:
-                return Response("Event id is wrong!", status=status.HTTP_400_BAD_REQUEST)
+                return Response("Event id is required!", status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             Utils.log_exception(e)
             raise e
@@ -204,41 +312,18 @@ class EventViewSet(ViewSet):
     def delete(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {PUT} /user update user
-        @apiName update
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {DELETE} /event/:id delete event
+        @apiName EventDelete
+        @apiGroup Ribo_api Event
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+           "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
-
-        @apiSuccess {object} user
+        @apiSuccess 200
         """
         try:
             user = self.request.user
@@ -246,7 +331,9 @@ class EventViewSet(ViewSet):
             event_id = kwargs.get("pk",None)
             if event_id:
                 service.events().delete(calendarId='primary',  eventId=event_id).execute()
-                return Response("Deleted")
+                return Response("Deleted", status=status.HTTP_200_OK)
+            else:
+                return Response("Event id is required!", status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             Utils.log_exception(e)
             raise e

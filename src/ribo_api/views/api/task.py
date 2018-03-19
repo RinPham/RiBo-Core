@@ -14,45 +14,34 @@ class TaskViewSet(ViewSet):
     def list(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {POST} /user Create new user
-        @apiName Create
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {GET} /task Get list task
+        @apiName TaskList
+        @apiGroup Ribo_api Task
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
-
-        @apiSuccess {object} user
+        @apiSuccess {object[]} task
+        @apiSuccessExample {json}
+        [
+            {
+                "id": "5aafd181e3d8ee3175f5ae84",
+                "title": "goi dien cho bo",
+                "content": "goi dien cho bo",
+                "user_id": "5aadf857e3d8ee10db5546ba",
+                "intent_id": "5aa810bfe3d8ee4f97613dfa",
+                "at_time": "2018-09-08T07:00:00Z",
+                "done": false
+            }
+        ]
         """
         try:
-            user_id = request.GET.get('user_id','')
-            tasks = Task.objects(user_id=user_id)
+            user = self.request.user
+            tasks = Task.objects(user_id=user.id)
             serializer = self.serializer_class(tasks, many=True)
             return Response(serializer.data)
         except Exception as e:
@@ -62,44 +51,36 @@ class TaskViewSet(ViewSet):
     def create(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {POST} /user Create new user
-        @apiName Create
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {POST} /task Create task
+        @apiName TaskCreate
+        @apiGroup Ribo_api Task
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
+        @apiParam {string} title
+        @apiParam {string} content
+        @apiParam {datetime} at_time format '2018-09-08T07:00:00Z'
 
-        @apiSuccess {object} user
+        @apiSuccess {object} task
+        @apiSuccessExample {json}
+        {
+            "id": "5aafd181e3d8ee3175f5ae84",
+            "title": "goi dien cho bo",
+            "content": "goi dien cho bo",
+            "user_id": "5aadf857e3d8ee10db5546ba",
+            "intent_id": "5aa810bfe3d8ee4f97613dfa",
+            "at_time": "2018-09-08T07:00:00Z",
+            "done": false
+        }
         """
         try:
             data = request.data.copy()
+            data['user_id'] = request.user.id
             data['intent_id'] = "5aa810bfe3d8ee4f97613dfa"
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
@@ -109,48 +90,40 @@ class TaskViewSet(ViewSet):
             Utils.log_exception(e)
             raise e
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, pk, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {PUT} /user update user
-        @apiName update
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {PUT} /task/:id_task Edit task
+        @apiName TaskEdit
+        @apiGroup Ribo_api Task
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
+        @apiParam {string} title
+        @apiParam {string} content
+        @apiParam {datetime} at_time format '2018-09-08T07:00:00Z'
+        @apiParam {boolean} done
 
-        @apiSuccess {object} user
+        @apiSuccess {object} task
+        @apiSuccessExample {json}
+        {
+            "id": "5aafd181e3d8ee3175f5ae84",
+            "title": "goi dien cho bo",
+            "content": "goi dien cho bo",
+            "user_id": "5aadf857e3d8ee10db5546ba",
+            "intent_id": "5aa810bfe3d8ee4f97613dfa",
+            "at_time": "2018-09-08T07:00:00Z",
+            "done": false
+        }
         """
         try:
             data = request.data.copy()
-            task = Task.objects(id = data.get('id', None))[0]
+            task = Task.objects(id = pk)[0]
             serializer = self.serializer_class(task, data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -159,48 +132,23 @@ class TaskViewSet(ViewSet):
             Utils.log_exception(e)
             raise e
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request,pk, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {PUT} /user update user
-        @apiName update
-        @apiGroup VMS_API Account
-        @apiPermission none
+        @api {PUT} /task/:id_task Delete task
+        @apiName TaskDelete
+        @apiGroup Ribo_api Task
+        @apiPermission Authentication
 
-        @apiHeader {number} Type Device type (1: Mobile, 2: Android phone, 3: IOS phone, 4: Window phone, 5: Android tablet, 6: IOS tablet, 7: Mobile web, tablet web, 8: Desktop web)
-        @apiHeader {string} Device Required, Device id, If from browser, please use md5 of useragent.
-        @apiHeader {string} Appid Required
-        @apiHeader {string} Agent Optional
-        @apiHeader {string} Authorization Optional. format: token <token_string>
-        @apiHeaderExample {json} Request Header Non Authenticate Example:
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
         {
-            "Type": 1,
-            "Device": "postman-TEST",
-            "Appid": 1,
-            "Agent": "Samsung A5 2016, Android app, build_number other_info"
+           "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiParam {string} email
-        @apiParam {string} password
-        @apiParam {string} [first_name]
-        @apiParam {string} [middle_name]
-        @apiParam {string} [last_name]
-        @apiParam {object} profile
-        @apiParam {number} [profile.gender] (0: male, 1: female)
-        @apiParam {string} [profile.dob]
-        @apiParam {file} [profile.avatar] upload file
-        @apiParam {string} [profile.address1]
-        @apiParam {string} [profile.address2]
-        @apiParam {string} [profile.zip_code]
-        @apiParam {string} [profile.city]
-        @apiParam {string} [profile.home_phonenumber] Home phone
-        @apiParam {string} [profile.mobile_phonenumber] Mobile phone
-
-        @apiSuccess {object} user
+        @apiSuccess 200
         """
         try:
-            data = request.data.copy()
-            pk = data.get('id', None)
             task = Task.objects(id = pk)
             if len(task) == 0:
                 return Response("Id is wrong!", status=404)
