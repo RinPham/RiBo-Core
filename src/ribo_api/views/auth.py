@@ -35,7 +35,7 @@ class AuthViewSet(ViewSet):
         """
         try:
             code = request.data['code']
-            redirect_uri = Utils.get_public_url('/api/v1/auth')
+            redirect_uri = 'http://localhost:8888/api/v1/auth'
             credentials = OauthService.get_credentials(code, redirect_uri)
             json = credentials.to_json()
             data = ApiService.create_token(json)
