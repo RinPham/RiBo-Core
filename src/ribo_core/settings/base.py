@@ -17,7 +17,7 @@ MEDIA_ROOT = join(BASE_DIR, 'media')
 GEOIP_PATH = join(BASE_DIR, 'geo')
 DOC_URL = '/docs/'
 DOC_ROOT = join(BASE_DIR, 'docs')
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*', 'localhost:8001', '35.196.234.119'])
+ALLOWED_HOSTS = ['*', '35.196.234.119']
 
 USER_PHOTOS_SYNC_PATH = 'uphotos'
 USER_DATA_SYNC_PATH = 'updata'
