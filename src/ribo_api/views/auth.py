@@ -34,7 +34,7 @@ class AuthViewSet(ViewSet):
         }
         """
         try:
-            code = request.GET['code']
+            code = request.data['code']
             redirect_uri = Utils.get_public_url('/api/v1/auth')
             credentials = OauthService.get_credentials(code, redirect_uri)
             json = credentials.to_json()
