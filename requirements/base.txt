@@ -38,3 +38,4 @@ mongoengine
 django-rest-framework-mongoengine
 google-api-python-client
 nltk==3.2.5
+psycopg2
