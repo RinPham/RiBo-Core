@@ -50,7 +50,7 @@ TEMPLATES = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY', default="8gsuG@6@_BC`_LoOTq=x@xJEpF!IM;=C.2R>P*d+L1v+R#@0EDB3YHN?s/A$NT[dKNealcVdnJano#~`3SQO&RM;(m3T'y0~)Z3|")
 CSRF_COOKIE_SECURE = True
 API_HOST = env('API_HOST')
 API_PORT = env('API_PORT')
