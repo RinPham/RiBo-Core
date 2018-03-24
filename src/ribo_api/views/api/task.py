@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
@@ -123,11 +124,14 @@ class TaskViewSet(ViewSet):
         """
         try:
             data = request.data.copy()
-            task = Task.objects(id = pk)[0]
-            serializer = self.serializer_class(task, data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+            if pk:
+                task = Task.objects(id = pk)[0]
+                serializer = self.serializer_class(task, data=data,partial=True)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                raise Response({'msg': "Id task is required"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             Utils.log_exception(e)
             raise e
