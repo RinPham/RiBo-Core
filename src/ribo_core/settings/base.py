@@ -80,6 +80,7 @@ THIRD_PARTY_APPS = (
     # 'django_beanstalkd',
     'rest_framework_mongoengine',
     'django_mongoengine',
+    'channels'
 )
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -125,6 +126,17 @@ MONGODB_DATABASES = {
 
 DATABASE_ROUTERS = ('ribo_core.dbrouter.DatabaseRouter',)
 DATABASE_APPS_MAPPING = {'no_sql': 'no_sql'}
+
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [env('REDIS_URL', default='redis://localhost:6379')],
+        },
+        "ROUTING": "ribo_api.routing.channel_routing",
+    },
+}
 
 Q_CLUSTER = {
     'name': 'vms',

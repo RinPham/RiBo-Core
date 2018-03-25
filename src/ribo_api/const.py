@@ -25,5 +25,9 @@ class DeviceType(const):
     MOBILE_WEB = 7
     DESKTOP_WEB = 8
 
+class FromWho(const):
+    RIBO_ASSISTANT = 0
+    USER = 1
+
 
 
