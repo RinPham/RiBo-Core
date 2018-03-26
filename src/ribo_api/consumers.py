@@ -4,6 +4,7 @@ import logging
 from channels import Group
 from channels.sessions import channel_session
 from ribo_api.models import Channel
+from ribo_api.services.conversation import ConversationService
 
 log = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ def ws_connect(message):
 def ws_receive(message):
     # Look up the room from the channel session, bailing if it doesn't exist
     try:
-        user_id = message.channel_session['room']
+        user_id = message.channel_session['channel']
         channel = Channel.objects.get(user_id=user_id)
     except KeyError:
         log.debug('no room in channel_session')
@@ -63,7 +64,7 @@ def ws_receive(message):
     if data:
         log.debug('chat message room=%s handle=%s message=%s',
             channel.user_id, data['handle'], data['message'])
-        m = 'reply'
+        m = ConversationService.create_message(data)
 
         # See above for the note about Group
         Group('chat-'+user_id, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
@@ -71,7 +72,7 @@ def ws_receive(message):
 @channel_session
 def ws_disconnect(message):
     try:
-        user_id = message.channel_session['room']
+        user_id = message.channel_session['channel']
         channel = Channel.objects.get(user_id=user_id)
         Group('chat-'+user_id, channel_layer=message.channel_layer).discard(message.reply_channel)
     except (KeyError, channel.DoesNotExist):

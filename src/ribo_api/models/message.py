@@ -14,10 +14,8 @@ class ContentMessage(EmbeddedDocument):
 class Message(TimeStampedModel):
     user_id = fields.ObjectIdField(required=True)
     content = fields.EmbeddedDocumentField(ContentMessage, required=True)
-    intents = fields.ObjectIdField()
     action = fields.StringField()
-    question_id = fields.ObjectIdField()
-    as_ribo_answer = fields.BooleanField()
+    next_question_id = fields.ObjectIdField()
 
 
     class Meta:
