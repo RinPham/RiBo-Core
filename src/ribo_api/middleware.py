@@ -10,8 +10,8 @@ class ApiMiddleware(object):
     """
     API middleware here
     """
-    handling_apps = [settings.KITCHENROCK_API]
-    logging_apps = [settings.KITCHENROCK_API]
+    handling_apps = [settings.RIBO_API]
+    logging_apps = [settings.RIBO_API]
     view = None
     view_kwargs = None
 

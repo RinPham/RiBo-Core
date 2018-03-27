@@ -40,5 +40,8 @@ google-api-python-client
 nltk==3.2.5
 psycopg2
 asgi-redis==0.8.3
-channels==0.9.3
+asgiref==0.9
+channels==0.16.0
+daphne==0.14.2
+apiai
 

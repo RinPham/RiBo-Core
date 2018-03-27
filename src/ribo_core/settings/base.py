@@ -132,7 +132,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [env('REDIS_URL', default='redis://localhost:6379')],
+            "hosts":  [env('REDIS_URL', default='redis://localhost:6379')],
         },
         "ROUTING": "ribo_api.routing.channel_routing",
     },
@@ -212,6 +212,10 @@ GOOGLE_API_KEY_SERVER = env("GOOGLE_API_KEY_SERVER", default='')
 
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default='310203758762-vkc9hocnecbbcshsgf2ufctttp74pbgm.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default='dm5eWHh7qNq1YvfpOY6NEfrG')
+
+#dialogflow
+APIAI_CLIENT_ACCESS_TOKEN = env('APIAI_CLIENT_ACCESS_TOKEN', default='25bd008fa69f425790baaf477abc7e52')
+
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',

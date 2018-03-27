@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 
 from ribo_api.exceptions import TokenExpired
 from ribo_api.services.api import ApiService
+from ribo_api.services.dialogflow import ApiAIService
 from ribo_api.services.oauth import OauthService
 
 User = get_user_model()
@@ -53,6 +54,11 @@ class Command(BaseCommand):
                             action='store_true',
                             default=False,
                             help='save token')
+
+        parser.add_argument('-get_intent',
+                            action='store_true',
+                            default=False,
+                            help='get intents')
         
     def _run_command(self,*args, **kwargs):
         BASE_DIR = dirname(dirname(dirname(dirname(__file__))))
@@ -114,3 +120,11 @@ class Command(BaseCommand):
                 print(credentials)
             except Exception as e:
                 pass
+
+        if options.get('get_intent'):
+            text = input('Enter text: ')
+            try:
+                res = ApiAIService.get_intents(text)
+                print(res['result'])
+            except Exception as e:
+                raise e
