@@ -19,7 +19,7 @@ def ws_connect(message):
         if prefix != 'message':
             log.debug('invalid ws path=%s', message['path'])
             return
-        channel = Channel.objects.get(user_id=user_id)
+        channel = Channel.objects(user_id=user_id)
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])
         return
@@ -64,7 +64,7 @@ def ws_receive(message):
     if data:
         log.debug('chat message room=%s handle=%s message=%s',
             channel.user_id, data['handle'], data['message'])
-        m = ConversationService.create_message(data)
+        m = ConversationService.reply(data)
 
         # See above for the note about Group
         Group('chat-'+user_id, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})

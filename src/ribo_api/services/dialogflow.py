@@ -37,5 +37,11 @@ class ApiAIService(BaseService):
         response = ai.get_query(text)
         return response['result']
 
+    @classmethod
+    def get_response(cls, text, **kwargs):
+        ai = DialogFlow()
+        response = ai.get_query(text)
+        return response
+
 
 
