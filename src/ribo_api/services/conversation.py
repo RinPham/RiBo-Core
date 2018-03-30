@@ -20,6 +20,7 @@ class ConversationService(BaseService):
     def reply(cls, data, **kwargs):
         user_id = data.get("user_id",0)
         body = data.get("body","")
+        is_question = False
         if body:
             with transaction.atomic():
                 try:
@@ -34,20 +35,24 @@ class ConversationService(BaseService):
                         }
                         message['action'] = None
                         message['next_question_id'] = None
+                        message.save()
                     else:
                         is_question = False
                         next_question = None
                         if is_question:
-                            next_question = message['content']['question_text']
-                        message = cls.save_message(body, user_id, is_question, data)
-                    aibot_response = ApiAIService.get_response(body)
-                    print(aibot_response)
+                            pass
+                        message = cls.save_message(body, user_id, data, is_question, next_question)
+                    result = cls.process_reply(user_id,body)
+                    if is_question:
+                        answer_result = result['answer']
+                        message = cls.save_message(answer_result, user_id, data, False)
+                    return message
                 except:
                     pass
 
 
     @classmethod
-    def save_message(cls, body, user_id, is_question=False, next_question=None, **kwargs):
+    def save_message(cls, body, user_id, data, is_question=False, next_question=None,**kwargs):
         if is_question:
             message = Message()
             message['user_id'] = user_id
@@ -66,3 +71,13 @@ class ConversationService(BaseService):
             message['updated_at'] = timezone.now()
         message.save()
         return message
+
+
+    @classmethod
+    def process_reply(cls,user_id, text):
+        ai_result = ApiAIService.get_result(user_id,text)
+        params = ai_result['parameters']
+        action = ai_result['action']
+        fulfillment = ai_result['fulfillment']
+        result = {}
+        return result

@@ -12,11 +12,11 @@ class DialogFlow(object):
         self.access_token = settings.APIAI_CLIENT_ACCESS_TOKEN
         self.ai = apiai.ApiAI(self.access_token)
 
-    def get_query(self, query=None, language='en'):
+    def get_query(self, query=None, language='en', user_id=None):
         if query:
             self.request = self.ai.text_request()
             self.request.lang = language
-            self.request.session_id = "<SESSION_ID, UNIQUE FOR EACH USER>"
+            self.request.session_id = user_id
             self.request.query = query
             response = self.request.getresponse()
             return json.loads(response.read().decode())
@@ -32,15 +32,15 @@ class ApiAIService(BaseService):
         return response['metadata']
 
     @classmethod
-    def get_result(cls, text, **kwargs):
+    def get_result(cls, user_id, text, **kwargs):
         ai = DialogFlow()
-        response = ai.get_query(text)
+        response = ai.get_query(text, user_id=user_id)
         return response['result']
 
     @classmethod
-    def get_response(cls, text, **kwargs):
+    def get_response(cls, user_id, text, **kwargs):
         ai = DialogFlow()
-        response = ai.get_query(text)
+        response = ai.get_query(text, user_id=user_id)
         return response
 
 

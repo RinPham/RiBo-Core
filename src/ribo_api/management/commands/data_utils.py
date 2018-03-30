@@ -122,9 +122,13 @@ class Command(BaseCommand):
                 pass
 
         if options.get('get_intent'):
-            text = input('Enter text: ')
-            try:
-                res = ApiAIService.get_intents(text)
-                print(res['result'])
-            except Exception as e:
-                raise e
+            user_id = input('User_id:')
+            while 1:
+                text = input('Enter text: ')
+                if text == '':
+                    break
+                try:
+                    res = ApiAIService.get_response(user_id, text)
+                    print(res['result']['fulfillment']['speech'])
+                except Exception as e:
+                    raise e
