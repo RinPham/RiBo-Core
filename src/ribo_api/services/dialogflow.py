@@ -1,7 +1,43 @@
 from django.conf import settings
 import apiai, json
 from ribo_api.services.base import BaseService
+import os
+import requests
 
+API_AI_HOST = os.getenv('API_AI_URL', 'https://api.dialogflow.com/v1/')
+API_AI_VERSION = os.getenv('API_AI_VERSION', '20150910')
+DEFAULT_TIMEOUT = 10.0
+
+
+class ApiAiError(Exception):
+    pass
+
+
+def req(logger, access_token, meth, path, params, **kwargs):
+    full_url = API_AI_HOST + path + '?v='+API_AI_VERSION
+    logger.debug('%s %s %s', meth, full_url, params)
+    headers = {
+        'authorization': 'Bearer ' + access_token
+        # 'accept': 'application/vnd.wit.' + API_AI_VERSION + '+json'
+    }
+    headers.update(kwargs.pop('headers', {}))
+    rsp = requests.request(
+        meth,
+        full_url,
+        headers=headers,
+        params=params,
+        timeout=DEFAULT_TIMEOUT,
+        **kwargs
+    )
+    if rsp.status_code > 200:
+        raise ApiAiError('Wit responded with status: ' + str(rsp.status_code) +
+                       ' (' + rsp.reason + ')')
+    json = rsp.json()
+    if 'error' in json:
+        raise ApiAiError('Wit responded with an error: ' + json['error'])
+
+    logger.debug('%s %s %s', meth, full_url, json)
+    return json
 
 class DialogFlow(object):
 
