@@ -29,5 +29,11 @@ class FromWho(const):
     RIBO_ASSISTANT = 0
     USER = 1
 
+class TypeRepeat(const):
+    NONE = 0
+    DAILY = 1
+    WEEKLY = 2
+    WEEKDAYS = 3
+
 
 

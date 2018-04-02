@@ -3,7 +3,7 @@ from django.core.urlresolvers import resolve
 
 from ribo_api.serializers import ClientSerializer
 from ribo_api.services.utils import Utils
-from ribo_api.services.vmsrequest import VMSRequest
+from ribo_api.services.riborequest import VMSRequest
 
 
 class ApiMiddleware(object):

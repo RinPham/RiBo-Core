@@ -1,13 +1,3 @@
-#! /usr/bin/python
-
-#
-# Copyright (C) 2017 CG Vietnam, Inc
-# 
-# @link http://www.codeographer.com/
-#
-__author__ = "hien"
-__date__ = "$Jul 05, 2016 3:41:30 PM$"
-
 import logging
 import json
 
@@ -19,13 +9,13 @@ logger = logging.getLogger("project")
 
 
 def listener_logged_in(sender, user=None, **kwargs):
-    VMSRequest.user_id = user.id
+    RIBORequest.user_id = user.id
 
 
 user_logged_in.connect(listener_logged_in)
 
 
-class VMSRequest(object):
+class RIBORequest(object):
     ENV_HEADERS = (
         'X-Varnish',
         'X-Request-Start',

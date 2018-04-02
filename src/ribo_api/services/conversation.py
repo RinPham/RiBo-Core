@@ -79,5 +79,18 @@ class ConversationService(BaseService):
         params = ai_result['parameters']
         action = ai_result['action']
         fulfillment = ai_result['fulfillment']
-        result = {}
+        if 'reminder' in action:
+            if action == 'reminders.add':
+                task_data = {
+                    'title': params['name'],
+                    'user_id': user_id,
+                    'at_time': params['date-time'],
+                    'recurrence': params['recurrence']
+                }
+
+        elif 'event' in action:
+            pass
+        result = {
+            'answer' : fulfillment['speech']
+        }
         return result

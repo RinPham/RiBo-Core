@@ -32,11 +32,10 @@ class TaskViewSet(ViewSet):
             {
                 "id": "5aafd181e3d8ee3175f5ae84",
                 "title": "goi dien cho bo",
-                "content": "goi dien cho bo",
                 "user_id": "5aadf857e3d8ee10db5546ba",
-                "intent_id": "5aa810bfe3d8ee4f97613dfa",
                 "at_time": "2018-09-08T07:00:00Z",
-                "done": false
+                "done": false,
+                "repeat": 0
             }
         ]
         """
@@ -66,23 +65,22 @@ class TaskViewSet(ViewSet):
         @apiParam {string} title
         @apiParam {string} content
         @apiParam {datetime} at_time format '2018-09-08T07:00:00Z'
+        @apiParam {int} repeat
 
         @apiSuccess {object} task
         @apiSuccessExample {json}
-        {
+         {
             "id": "5aafd181e3d8ee3175f5ae84",
             "title": "goi dien cho bo",
-            "content": "goi dien cho bo",
             "user_id": "5aadf857e3d8ee10db5546ba",
-            "intent_id": "5aa810bfe3d8ee4f97613dfa",
             "at_time": "2018-09-08T07:00:00Z",
-            "done": false
+            "done": false,
+            "repeat": 0
         }
         """
         try:
             data = request.data.copy()
             data['user_id'] = request.user.id
-            data['intent_id'] = "5aa810bfe3d8ee4f97613dfa"
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -115,11 +113,10 @@ class TaskViewSet(ViewSet):
         {
             "id": "5aafd181e3d8ee3175f5ae84",
             "title": "goi dien cho bo",
-            "content": "goi dien cho bo",
             "user_id": "5aadf857e3d8ee10db5546ba",
-            "intent_id": "5aa810bfe3d8ee4f97613dfa",
             "at_time": "2018-09-08T07:00:00Z",
-            "done": false
+            "done": false,
+            "repeat": 0,
         }
         """
         try:
