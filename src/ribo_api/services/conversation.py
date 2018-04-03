@@ -80,27 +80,36 @@ class ConversationService(BaseService):
         params = ai_result['parameters']
         action = ai_result['action']
         fulfillment = ai_result['fulfillment']
+        result = None
         if 'reminder' in action:
             if action == 'reminders.add':
                 task_data = {
-                    'title': params['name'],
                     'user_id': user_id,
-                    'at_time': params['date-time'],
                     'recurrence': params['recurrence']
                 }
-                result = TaskService.create_task(data=task_data)
+                date = params.get('date', '')
+                time = params.get('time', '')
+                name = params.get('name', '')
+                if date and time:
+                    task_data['at_time'] = date + time
+                if name:
+                    task_data['title'] = name
+                if name and time and date:
+                    result = TaskService.create_task(data=task_data)
             elif action == 'reminders.get':
                 query_data = { 'user_id': user_id}
-                date_time = params.get('date-time','')
+                date = params.get('date','')
+                time = params.get('time','')
                 name = params.get('name','')
-                if date_time:
-                    query_data['at_time'] = date_time
+                if date and time:
+                    query_data['at_time'] = date + time
                 if name:
                     query_data['title'] = name
                 result = TaskService.get_task(query_data)
         elif 'event' in action:
             pass
         data = {
-            'answer' : fulfillment['speech']
+            'answer' : fulfillment['speech'],
+            'result' : result
         }
         return data
