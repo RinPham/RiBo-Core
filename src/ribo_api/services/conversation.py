@@ -4,6 +4,7 @@ from ribo_api.models.message import Message
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import DialogFlow, ApiAIService
+from ribo_api.services.task import TaskService
 
 
 class ConversationService(BaseService):
@@ -87,10 +88,19 @@ class ConversationService(BaseService):
                     'at_time': params['date-time'],
                     'recurrence': params['recurrence']
                 }
-
+                result = TaskService.create_task(data=task_data)
+            elif action == 'reminders.get':
+                query_data = { 'user_id': user_id}
+                date_time = params.get('date-time','')
+                name = params.get('name','')
+                if date_time:
+                    query_data['at_time'] = date_time
+                if name:
+                    query_data['title'] = name
+                result = TaskService.get_task(query_data)
         elif 'event' in action:
             pass
-        result = {
+        data = {
             'answer' : fulfillment['speech']
         }
-        return result
+        return data

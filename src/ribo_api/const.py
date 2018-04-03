@@ -35,5 +35,7 @@ class TypeRepeat(const):
     WEEKLY = 2
     WEEKDAYS = 3
 
-
-
+class Recurrence(const):
+    RECURRENCE_WEEKLY = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays', 'saturdays', 'sundays']
+    RECURRENCE_DAILY = 'daily'
+    RECURRENCE_WEEKDAYS = 'weekdays'
