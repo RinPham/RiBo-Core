@@ -1,10 +1,11 @@
 from django.db import transaction
 from django.utils import timezone
-from ribo_api.models.message import Message
+from ribo_api.models.message import Message, ContentMessage
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import DialogFlow, ApiAIService
 from ribo_api.services.task import TaskService
+from ribo_api.string import MSG_STRING
 
 
 class ConversationService(BaseService):
@@ -22,6 +23,7 @@ class ConversationService(BaseService):
         user_id = data.get("user_id",0)
         body = data.get("body","")
         is_question = False
+        messages = []
         if body:
             with transaction.atomic():
                 try:
@@ -29,11 +31,7 @@ class ConversationService(BaseService):
                     if message['content']['answer_text']:
                         message = Message()
                         message['user_id'] = user_id
-                        message['content'] = {
-                            'question_text' : body,
-                            'answer_text': '',
-                            'from_who': 1
-                        }
+                        message.content = ContentMessage(question_text=body, answer_text='', from_who=1)
                         message['action'] = None
                         message['next_question_id'] = None
                         message.save()
@@ -42,60 +40,80 @@ class ConversationService(BaseService):
                         next_question = None
                         if is_question:
                             pass
-                        message = cls.save_message(body, user_id, data, is_question, next_question)
-                    result = cls.process_reply(user_id,body)
+                        message = cls.save_user_message(body, user_id, data, is_question, next_question)
+                    result = cls.process_reply(user_id,body, message)
+                    response = result['response']
                     if is_question:
-                        answer_result = result['answer']
-                        message = cls.save_message(answer_result, user_id, data, False)
-                    return message
-                except:
-                    pass
+                        message = cls.save_user_message(response, user_id, data, False)
+                    else:
+                        message = cls.create_message(response, user_id, result, 0)
+                        if result.get('finish',False):
+                            text = MSG_STRING.NEED_RIBO
+                            message2 = cls.create_message(text, user_id, result, 0)
+                            messages.append(message2)
+                    messages.append(message)
+                    return reversed(messages)
+                except Exception as e:
+                    raise e
 
 
     @classmethod
-    def save_message(cls, body, user_id, data, is_question=False, next_question=None,**kwargs):
+    def save_user_message(cls, body, user_id, data, is_question=False, next_question=None,**kwargs):
         if is_question:
             message = Message()
             message['user_id'] = user_id
-            message['content'] = {
-                'question_text': body,
-                'answer_text': '',
-                'from_who': 1
-            }
+            message.content = ContentMessage(question_text=body, answer_text='',from_who=1)
             message['action'] = None
             message['next_question_id'] = None
             if next_question:
                 message.next_question_id = next_question.id
         else:
             message = Message.objects(user_id=user_id).order_by("-id")[0]
-            message['content']['answer'] = body
+            message['content']['answer_text'] = body
             message['updated_at'] = timezone.now()
+        message.save()
+        return message
+
+    @classmethod
+    def create_message(cls, text, user_id, data, next_question, **kwargs):
+        message = Message()
+        message['user_id'] = user_id
+        message.content = ContentMessage(question_text=text, answer_text='', from_who=0)
+        message['action'] = data.get('action','')
+        message['next_question_id'] = None
+        if next_question:
+            message.next_question_id = next_question.id
         message.save()
         return message
 
 
     @classmethod
-    def process_reply(cls,user_id, text):
+    def process_reply(cls,user_id, text, message):
         ai_result = ApiAIService.get_result(user_id,text)
         params = ai_result['parameters']
         action = ai_result['action']
         fulfillment = ai_result['fulfillment']
+        response = fulfillment.get('speech','')
         result = None
+        finish = False
         if 'reminder' in action:
             if action == 'reminders.add':
                 task_data = {
                     'user_id': user_id,
                     'recurrence': params['recurrence']
                 }
-                date = params.get('date', '')
+                dates = params.get('date', '')
                 time = params.get('time', '')
                 name = params.get('name', '')
-                if date and time:
-                    task_data['at_time'] = date + time
+                if dates and time:
+                    task_data['at_time'] = []
+                    for date in dates:
+                        task_data['at_time'].append(date + "T" + time)
                 if name:
                     task_data['title'] = name
                 if name and time and date:
                     result = TaskService.create_task(data=task_data)
+                    finish = True
             elif action == 'reminders.get':
                 query_data = { 'user_id': user_id}
                 date = params.get('date','')
@@ -106,10 +124,21 @@ class ConversationService(BaseService):
                 if name:
                     query_data['title'] = name
                 result = TaskService.get_task(query_data)
+                finish = True
+            elif action == 'reminders.reschedule':
+                pass
+            elif action == 'reminders.remove':
+                pass
+            elif action == 'reminders.rename':
+                pass
+
         elif 'event' in action:
             pass
+        message['action'] = action
+        message.save()
         data = {
-            'answer' : fulfillment['speech'],
+            'response' : response,
+            'finish': finish,
             'result' : result
         }
         return data

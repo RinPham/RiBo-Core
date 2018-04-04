@@ -12,7 +12,10 @@ from os.path import dirname
 from django.contrib.auth import get_user_model
 
 from ribo_api.exceptions import TokenExpired
+from ribo_api.models.message import Message, ContentMessage
+from ribo_api.serializers.message import MessageSerializer
 from ribo_api.services.api import ApiService
+from ribo_api.services.conversation import ConversationService
 from ribo_api.services.dialogflow import ApiAIService
 from ribo_api.services.oauth import OauthService
 
@@ -123,12 +126,24 @@ class Command(BaseCommand):
 
         if options.get('get_intent'):
             user_id = input('User_id:')
+            message = Message()
+            message['user_id'] = user_id
+            message.content = ContentMessage(question_text='Hello, Can I help you with something?', answer_text='', from_who=0)
+            message['action'] = 'greeting'
+            message['next_question_id'] = None
+            message.save()
+            print('Ribo: '+ message['content']['question_text'])
             while 1:
                 text = input('Enter text: ')
                 if text == '':
                     break
                 try:
-                    res = ApiAIService.get_response(user_id, text)
-                    print(res['result']['fulfillment']['speech'])
+                    data = {
+                        'body': text,
+                        'user_id': user_id
+                    }
+                    msgs = ConversationService.reply(data)
+                    for msg in msgs:
+                        print("Ribo: " + msg['content']['question_text'])
                 except Exception as e:
                     raise e
