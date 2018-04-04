@@ -111,7 +111,7 @@ class ConversationService(BaseService):
                         task_data['at_time'].append(date + "T" + time)
                 if name:
                     task_data['title'] = name
-                if name and time and date:
+                if name and time and dates:
                     result = TaskService.create_task(data=task_data)
                     finish = True
             elif action == 'reminders.get':
