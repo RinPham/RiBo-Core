@@ -1,5 +1,7 @@
 from django.db import transaction
 from django.utils import timezone
+
+from ribo_api.const import TaskType
 from ribo_api.models.message import Message, ContentMessage
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
 from ribo_api.services.base import BaseService
@@ -98,6 +100,7 @@ class ConversationService(BaseService):
         finish = False
         if 'reminder' in action:
             if action == 'reminders.add':
+                should_add = False
                 task_data = {
                     'user_id': user_id,
                     'recurrence': params['recurrence']
@@ -111,7 +114,11 @@ class ConversationService(BaseService):
                         task_data['at_time'].append(date + "T" + time)
                 if name:
                     task_data['title'] = name
-                if name and time and dates:
+                    if 'call' in name:
+                        task_data['type'] = TaskType.CALL
+                    elif 'email' in name:
+                        task_data['type'] = TaskType.EMAIL
+                if name and time and dates and should_add:
                     result = TaskService.create_task(data=task_data)
                     finish = True
             elif action == 'reminders.get':

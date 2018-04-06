@@ -14,6 +14,7 @@ class ContentMessage(EmbeddedDocument):
 class Message(TimeStampedModel):
     user_id = fields.ObjectIdField(required=True)
     content = fields.EmbeddedDocumentField(ContentMessage, required=True)
+    slots = fields.ListField(fields.StringField(null=True))
     action = fields.StringField(null=True)
     next_question_id = fields.ObjectIdField(default=None, null=True)
 

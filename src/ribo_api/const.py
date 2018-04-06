@@ -34,8 +34,15 @@ class TypeRepeat(const):
     DAILY = 1
     WEEKLY = 2
     WEEKDAYS = 3
+    WEEKENDS = 4
 
 class Recurrence(const):
     RECURRENCE_WEEKLY = ['mondays', 'tuesdays', 'wednesdays', 'thursdays', 'fridays', 'saturdays', 'sundays']
     RECURRENCE_DAILY = 'daily'
     RECURRENCE_WEEKDAYS = 'weekdays'
+
+class TaskType(const):
+    NONE = 0
+    CALL = 1
+    EMAIL = 2
+
