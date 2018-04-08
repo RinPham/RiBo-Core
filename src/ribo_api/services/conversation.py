@@ -1,12 +1,13 @@
 from django.db import transaction
 from django.utils import timezone
 
-from ribo_api.const import TaskType
+from ribo_api.const import TaskType, Recurrence, weekday, TypeRepeat
 from ribo_api.models.message import Message, ContentMessage
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import DialogFlow, ApiAIService
 from ribo_api.services.task import TaskService
+from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
 
 
@@ -100,25 +101,24 @@ class ConversationService(BaseService):
         finish = False
         if 'reminder' in action:
             if action == 'reminders.add':
-                should_add = False
                 task_data = {
                     'user_id': user_id,
-                    'recurrence': params['recurrence']
                 }
-                dates = params.get('date', '')
-                time = params.get('time', '')
+                date_time = params.get('date-time', '')
                 name = params.get('name', '')
-                if dates and time:
+                if params.get('recurrence','') and not date_time:
+                    date_time, task_data['repeat'] = cls.get_datetime(params)
+                if date_time:
                     task_data['at_time'] = []
-                    for date in dates:
-                        task_data['at_time'].append(date + "T" + time)
+                    for date in date_time:
+                        task_data['at_time'].append(date)
                 if name:
                     task_data['title'] = name
                     if 'call' in name:
                         task_data['type'] = TaskType.CALL
                     elif 'email' in name:
                         task_data['type'] = TaskType.EMAIL
-                if name and time and dates and should_add:
+                if name and date_time:
                     result = TaskService.create_task(data=task_data)
                     finish = True
             elif action == 'reminders.get':
@@ -149,3 +149,29 @@ class ConversationService(BaseService):
             'result' : result
         }
         return data
+
+
+    @classmethod
+    def get_datetime(cls,data):
+        recurrences = data.get('recurrence', '')
+        date_time = []
+        repeat = TypeRepeat.NONE
+        for _recur in recurrences:
+            if _recur in Recurrence.RECURRENCE_WEEKLY:
+                date_number = weekday[_recur]
+                date_time.append(Utils.next_weekday(date_number))
+                repeat = TypeRepeat.WEEKLY
+            elif _recur == Recurrence.RECURRENCE_DAILY:
+                repeat = TypeRepeat.DAILY
+            elif _recur == Recurrence.RECURRENCE_MONTHLY:
+                repeat = TypeRepeat.MONTHLY
+            elif _recur == Recurrence.RECURRENCE_WEEKDAYS:
+                repeat = TypeRepeat.WEEKDAYS
+            elif _recur == Recurrence.RECURRENCE_WEEKENDS:
+                date_time.append(Utils.next_weekday(weekday['sat']))
+                date_time.append(Utils.next_weekday(weekday['sun']))
+                repeat = TypeRepeat.WEEKENDS
+        return date_time,repeat
+
+
+

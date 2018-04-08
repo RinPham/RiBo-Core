@@ -452,6 +452,20 @@ class Utils:
             return public_base
         return protocol + public_base + path
 
+    @classmethod
+    def next_weekday(cls, weekday, date=datetime.today()):
+        day_gap = weekday - date.weekday()
+        if day_gap <= 0:
+            day_gap += 7
+        return date + timedelta(days=day_gap)
+
+    @classmethod
+    def last_weekday(cls, weekday, date=datetime.today()):
+        day_gap = weekday - date.weekday()
+        if day_gap >= 0:
+            day_gap -= 7
+        return date + timedelta(days=day_gap)
+
     """
     @staticmethod
     def get_tz(phone_number):
