@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.utils import timezone
-
+from datetime import datetime
 from ribo_api.const import TaskType, Recurrence, weekday, TypeRepeat
 from ribo_api.models.message import Message, ContentMessage
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
@@ -104,10 +104,12 @@ class ConversationService(BaseService):
                 task_data = {
                     'user_id': user_id,
                 }
-                date_time = params.get('date-time', '')
+                date_time = params.get('date-time', [])
                 name = params.get('name', '')
-                if params.get('recurrence','') and not date_time:
-                    date_time, task_data['repeat'] = cls.get_datetime(params)
+                recurrences = params.get('recurrence', [])
+                date_time = datetime.strptime(date_time[0], '%Y-%m-%dT%H:%M:%S.000Z')
+                if recurrences and recurrences[0] != Recurrence.RECURRENCE_NONE:
+                    date_time = cls.get_datetime(params, date_time)
                 if date_time:
                     task_data['at_time'] = []
                     for date in date_time:
@@ -118,7 +120,8 @@ class ConversationService(BaseService):
                         task_data['type'] = TaskType.CALL
                     elif 'email' in name:
                         task_data['type'] = TaskType.EMAIL
-                if name and date_time:
+                if name and date_time and recurrences:
+                    task_data['recurrence'] = recurrences
                     result = TaskService.create_task(data=task_data)
                     finish = True
             elif action == 'reminders.get':
@@ -152,26 +155,16 @@ class ConversationService(BaseService):
 
 
     @classmethod
-    def get_datetime(cls,data):
+    def get_datetime(cls,data, date_time):
         recurrences = data.get('recurrence', '')
-        date_time = []
-        repeat = TypeRepeat.NONE
         for _recur in recurrences:
             if _recur in Recurrence.RECURRENCE_WEEKLY:
                 date_number = weekday[_recur]
                 date_time.append(Utils.next_weekday(date_number))
-                repeat = TypeRepeat.WEEKLY
-            elif _recur == Recurrence.RECURRENCE_DAILY:
-                repeat = TypeRepeat.DAILY
-            elif _recur == Recurrence.RECURRENCE_MONTHLY:
-                repeat = TypeRepeat.MONTHLY
-            elif _recur == Recurrence.RECURRENCE_WEEKDAYS:
-                repeat = TypeRepeat.WEEKDAYS
             elif _recur == Recurrence.RECURRENCE_WEEKENDS:
                 date_time.append(Utils.next_weekday(weekday['sat']))
                 date_time.append(Utils.next_weekday(weekday['sun']))
-                repeat = TypeRepeat.WEEKENDS
-        return date_time,repeat
+        return date_time
 
 
 
