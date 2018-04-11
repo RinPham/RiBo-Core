@@ -1,0 +1,20 @@
+
+#!/bin/bash
+
+NAME="riboapp"
+DJANGODIR=/home/rinhd01/RiBo-Core/src
+USER=root
+GROUP=webdata
+NUM_WORKERS=1
+DJANGO_SETTINGS_MODULE=ribo_core.settings.production
+DJANGO_WSGI_MODULE=ribo_core.wsgi
+
+echo "Starting $NAME as `whoami`"
+
+# Activate the virtual environment
+cd $DJANGODIR
+source /home/rinhd01/RiBo-Core//env/bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+exec python3 /home/rinhd01/RiBo-Core/src/manage.py runserver 0.0.0.0:8000
