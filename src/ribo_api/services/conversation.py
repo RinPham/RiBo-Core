@@ -110,11 +110,11 @@ class ConversationService(BaseService):
                 date_time = params.get('date-time', [])
                 name = params.get('name', '')
                 recurrences = params.get('recurrence', [])
-                if '/' in date_time[0]:
-                    date_time = date_time.split('/')
                 if recurrences and recurrences[0] != Recurrence.RECURRENCE_NONE:
                     task_data['repeat_days'] = cls.get_datetime(params)
                 if date_time:
+                    if '/' in date_time[0]:
+                        date_time = date_time.split('/')
                     task_data['at_time'] = []
                     for date in date_time:
                         date = Utils.parse_datetime(date)
