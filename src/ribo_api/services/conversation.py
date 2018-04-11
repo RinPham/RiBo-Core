@@ -1,6 +1,8 @@
+import random
+
 from django.db import transaction
 from django.utils import timezone
-from datetime import datetime
+import datetime
 from ribo_api.const import TaskType, Recurrence, weekday, TypeRepeat
 from ribo_api.models.message import Message, ContentMessage
 from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
@@ -51,7 +53,7 @@ class ConversationService(BaseService):
                     else:
                         message = cls.create_message(response, user_id, result, 0)
                         if result.get('finish',False):
-                            text = MSG_STRING.NEED_RIBO
+                            text = MSG_STRING.NEED_RIBO[random.randint(0, len(MSG_STRING.NEED_RIBO)-1)]
                             message2 = cls.create_message(text, user_id, result, 0)
                             messages.append(message2)
                     messages.append(message)
@@ -103,16 +105,19 @@ class ConversationService(BaseService):
             if action == 'reminders.add':
                 task_data = {
                     'user_id': user_id,
+                    'location': params.get('location', '')
                 }
                 date_time = params.get('date-time', [])
                 name = params.get('name', '')
                 recurrences = params.get('recurrence', [])
-                date_time = datetime.strptime(date_time[0], '%Y-%m-%dT%H:%M:%S.000Z')
+                if '/' in date_time[0]:
+                    date_time = date_time.split('/')
                 if recurrences and recurrences[0] != Recurrence.RECURRENCE_NONE:
-                    date_time = cls.get_datetime(params, date_time)
+                    task_data['repeat_days'] = cls.get_datetime(params)
                 if date_time:
                     task_data['at_time'] = []
                     for date in date_time:
+                        date = Utils.parse_datetime(date)
                         task_data['at_time'].append(date)
                 if name:
                     task_data['title'] = name
@@ -126,14 +131,30 @@ class ConversationService(BaseService):
                     finish = True
             elif action == 'reminders.get':
                 query_data = { 'user_id': user_id}
-                date = params.get('date','')
-                time = params.get('time','')
+                date = params.get('date-time','')
                 name = params.get('name','')
-                if date and time:
-                    query_data['at_time'] = date + time
+                if '/' in date:
+                    query_data['at_time__gte'] = date.split('/')[0]
+                    query_data['at_time__lte'] = date.split('/')[1]
+                elif date:
+                    try:
+                        datetime.datetime.strptime(date, '%H:%M:%S')
+                        date = datetime.datetime.today().strftime('%Y-%m-%d') + 'T' + date + 'Z'
+                    except ValueError:
+                        pass
+                    query_data['at_time'] = date
                 if name:
-                    query_data['title'] = name
+                    query_data['title__contains'] = name
                 result = TaskService.get_task(query_data)
+                if result:
+                    response = 'Your reminders: '
+                    for i,item in enumerate(result):
+                        response += "\n" + str(i) + ". " + item['title'] + " on "
+                        for item_date in item['at_time']:
+                            at_time = datetime.datetime.strptime(item_date, '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y at %I:%M %p')
+                            response += at_time + ', '
+                else:
+                    response = MSG_STRING.NO_REMINDER
                 finish = True
             elif action == 'reminders.reschedule':
                 pass
@@ -141,7 +162,6 @@ class ConversationService(BaseService):
                 pass
             elif action == 'reminders.rename':
                 pass
-
         elif 'event' in action:
             pass
         message['action'] = action
@@ -155,8 +175,9 @@ class ConversationService(BaseService):
 
 
     @classmethod
-    def get_datetime(cls,data, date_time):
+    def get_datetime(cls,data):
         recurrences = data.get('recurrence', '')
+        date_time = []
         for _recur in recurrences:
             if _recur in Recurrence.RECURRENCE_WEEKLY:
                 date_number = weekday[_recur]
@@ -165,6 +186,18 @@ class ConversationService(BaseService):
                 date_time.append(Utils.next_weekday(weekday['sat']))
                 date_time.append(Utils.next_weekday(weekday['sun']))
         return date_time
+
+    @classmethod
+    def prepare_query_date(cls,date):
+        try:
+            datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            try:
+                datetime.datetime.strptime(date, '%H:%M:%S')
+                date = datetime.datetime.today().strftime('%Y-%m-%d') + 'T' + date + 'Z'
+            except ValueError as e:
+                raise e
+        return date
 
 
 
