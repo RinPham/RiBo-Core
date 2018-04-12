@@ -24,17 +24,28 @@ class MessageViewSet(ViewSet):
             "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
         }
 
-        @apiSuccess {object[]} task
+        @apiParam {string} user_id
+        @apiParam {string} body
+
+        @apiSuccess {object[]} messages
         @apiSuccessExample {json}
         [
             {
-                "id": "5aafd181e3d8ee3175f5ae84",
-                "title": "goi dien cho bo",
-                "user_id": "5aadf857e3d8ee10db5546ba",
-                "at_time": "2018-09-08T07:00:00Z",
-                "done": false,
-                "repeat": 0
-            }
+                "content" : {
+                  "answer_text" : "Go to work",
+                  "question_text" : "How should I name this reminder?",
+                  "from_who" : 0
+                },
+                "action" : "reminders.add",
+                "updated_at" : "2018-04-12T10:35:11.815000Z",
+                "id" : "5acf35f6e3d8ee1172a41ea5",
+                "next_question_id" : null,
+                "created_at" : "2018-04-12T10:33:26.675000Z",
+                "slots" : [
+
+                ],
+                "user_id" : "5acf1ee4e3d8ee13b1051b82"
+              }
         ]
         """
         try:

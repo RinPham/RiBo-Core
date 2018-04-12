@@ -65,9 +65,24 @@ def ws_receive(message):
         # log.debug('chat message room=%s handle=%s message=%s',
         #     channel.user_id, data['handle'], data['message'])
         m = ConversationService.reply(data)
+        for item in m:
+            item = MessageSerializer(item).data
+            data = {
+                "_id": item['id'],
+                "created_at": item['created_at'],
+                "updated_at": item['updated_at'],
+                "user_id": item['user_id'],
+                "content": {
+                    "answer_text": item['content']['answer_text'],
+                    "question_text": item['content']['question_text'],
+                    "from_who": item['content']['from_who']
+                },
+                "action": item['action'],
+                "slots": item['slots'],
+                "next_question_id": item['next_question_id']
+            }
+            Group('chat-' + user_id, channel_layer=message.channel_layer).send({'text': json.dumps(data)})
 
-        # See above for the note about Group
-        Group('chat-'+user_id, channel_layer=message.channel_layer).send({'message': MessageSerializer(m,many=True).data})
 
 @channel_session
 def ws_disconnect(message):
