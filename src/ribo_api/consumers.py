@@ -54,7 +54,7 @@ def ws_receive(message):
     try:
         data = json.loads(message.content['text'])
     except ValueError:
-        log.debug("ws message isn't json text=%s", text)
+        log.debug("ws message isn't json text=%s", data)
         return
 
     if set(data.keys()) != set(('user_id', 'body')):
