@@ -63,7 +63,6 @@ class TaskViewSet(ViewSet):
         }
 
         @apiParam {string} title
-        @apiParam {string} content
         @apiParam {datetime} at_time format '2018-09-08T07:00:00Z'
         @apiParam {int} repeat
 

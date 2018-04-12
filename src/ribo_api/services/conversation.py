@@ -21,6 +21,15 @@ class ConversationService(BaseService):
         page = kwargs.get("page",0)
         offset = limit*page
         messages = Message.objects(user_id=user_id).order_by("-id")[offset:offset+limit]
+        if not messages:
+            message = Message()
+            message['user_id'] = user_id
+            message.content = ContentMessage(question_text='Hello, Can I help you with something?', answer_text='',
+                                             from_who=0)
+            message['action'] = 'greeting'
+            message['next_question_id'] = None
+            message.save()
+            messages = Message.objects(user_id=user_id).order_by("-id")[offset:offset + limit]
         return MessageSerializer(messages, many=True).data
 
     @classmethod
