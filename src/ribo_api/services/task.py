@@ -12,6 +12,7 @@ class TaskService(BaseService):
 
     @classmethod
     def create_task(cls, data, **kwargs):
+        at_times = data.get("at_time", [])
         recurrences = data.get('recurrence', '')
         data['repeat'] = TypeRepeat.NONE
         if recurrences[0] in Recurrence.RECURRENCE_WEEKLY:
@@ -24,9 +25,11 @@ class TaskService(BaseService):
             data['repeat'] = TypeRepeat.WEEKDAYS
         elif recurrences[0] == Recurrence.RECURRENCE_WEEKENDS:
             data['repeat'] = TypeRepeat.WEEKENDS
-        serializer = TaskSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        for at_time in at_times:
+            data['at_time'] = at_time
+            serializer = TaskSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
         return serializer.data
 
     @classmethod
