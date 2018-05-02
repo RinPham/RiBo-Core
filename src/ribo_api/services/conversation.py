@@ -1,5 +1,5 @@
+import json
 import random
-
 from django.db import transaction
 from django.utils import timezone
 import datetime
@@ -143,25 +143,27 @@ class ConversationService(BaseService):
                 date = params.get('date-time','')
                 name = params.get('name','')
                 if '/' in date:
-                    query_data['at_time__gte'] = date.split('/')[0]
-                    query_data['at_time__lte'] = date.split('/')[1]
+                    query_data['at_time__gte'] = cls.prepare_query_date(date.split('/')[0], start=True)
+                    query_data['at_time__lte'] = cls.prepare_query_date(date.split('/')[1], start=False)
                 elif date:
                     try:
-                        datetime.datetime.strptime(date, '%H:%M:%S')
-                        date = datetime.datetime.today().strftime('%Y-%m-%d') + 'T' + date + 'Z'
+                        datetime.datetime.strptime(date, '%Y-%m-%d')
+                        query_data['at_time__gte'] = cls.prepare_query_date(date, start=True)
+                        query_data['at_time__lte'] = cls.prepare_query_date(date, start=False)
                     except ValueError:
-                        pass
-                    query_data['at_time'] = date
+                        query_data['at_time'] = cls.prepare_query_date(date)
                 if name:
                     query_data['title__contains'] = name
                 result = TaskService.get_task(query_data)
                 if result:
                     response = 'Your reminders: '
+                    list_slots = []
                     for i,item in enumerate(result):
+                        list_slots.append(json.dumps(dict(item)))
                         response += "\n" + str(i) + ". " + item['title'] + " on "
-                        for item_date in item['at_time']:
-                            at_time = datetime.datetime.strptime(item_date, '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y at %I:%M %p')
-                            response += at_time + ', '
+                        if item['at_time']:
+                            at_time = datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y at %I:%M %p')
+                            response += at_time
                 else:
                     response = MSG_STRING.NO_REMINDER
                 finish = True
@@ -197,15 +199,22 @@ class ConversationService(BaseService):
         return date_time
 
     @classmethod
-    def prepare_query_date(cls,date):
+    def prepare_query_date(cls,date, start=False):
         try:
             datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
         except ValueError:
             try:
                 datetime.datetime.strptime(date, '%H:%M:%S')
                 date = datetime.datetime.today().strftime('%Y-%m-%d') + 'T' + date + 'Z'
-            except ValueError as e:
-                raise e
+            except ValueError:
+                try:
+                    datetime.datetime.strptime(date, '%Y-%m-%d')
+                    if start:
+                        date = date + 'T00:00:00Z'
+                    else:
+                        date = date + 'T23:59:59Z'
+                except ValueError as e:
+                    raise e
         return date
 
 
