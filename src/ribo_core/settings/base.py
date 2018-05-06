@@ -133,6 +133,7 @@ CHANNEL_LAYERS = {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
             "hosts":  [env('REDIS_URL', default='redis://localhost:6379')],
+            "expiry": 600
         },
         "ROUTING": "ribo_api.routing.channel_routing",
     },

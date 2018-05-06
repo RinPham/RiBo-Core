@@ -45,7 +45,7 @@ class TaskService(BaseService):
         if data.get('at_time__gte',''):
             q = q & Q(at_time__gte=data.get('at_time__gte','')) & Q(at_time__lte=data.get('at_time__lte',''))
         elif data.get('at_time',''):
-            q = q & Q(at_time=datetime.strptime(data.get('at_time',''), '%Y-%m-%d'))
+            q = q & Q(at_time=data.get('at_time',''))
         if data.get('title__contains',''):
             q = q & Q(title__contains=data.get('title__contains', ''))
         return q

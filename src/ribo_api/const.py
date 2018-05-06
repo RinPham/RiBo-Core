@@ -39,7 +39,7 @@ class TypeRepeat(const):
 
 class Recurrence(const):
     RECURRENCE_NONE = 'no'
-    RECURRENCE_WEEKLY = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    RECURRENCE_WEEKLY = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'weekly']
     RECURRENCE_DAILY = 'daily'
     RECURRENCE_WEEKDAYS = 'weekdays'
     RECURRENCE_MONTHLY = 'monthly'

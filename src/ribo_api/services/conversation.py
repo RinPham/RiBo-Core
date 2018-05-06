@@ -3,14 +3,15 @@ import random
 from django.db import transaction
 from django.utils import timezone
 import datetime
-from ribo_api.const import TaskType, Recurrence, weekday, TypeRepeat
+from ribo_api.const import TaskType, Recurrence, weekday
 from ribo_api.models.message import Message, ContentMessage
-from ribo_api.serializers.message import ContentMessageSerializer, MessageSerializer
+from ribo_api.serializers.message import  MessageSerializer
 from ribo_api.services.base import BaseService
-from ribo_api.services.dialogflow import DialogFlow, ApiAIService
+from ribo_api.services.dialogflow import ApiAIService
 from ribo_api.services.task import TaskService
 from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
+from dateutil import parser
 
 
 class ConversationService(BaseService):
@@ -36,7 +37,6 @@ class ConversationService(BaseService):
     def reply(cls, data, **kwargs):
         user_id = data.get("user_id",0)
         body = data.get("body","")
-        is_question = False
         messages = []
         if body:
             with transaction.atomic():
@@ -50,41 +50,25 @@ class ConversationService(BaseService):
                         message['next_question_id'] = None
                         message.save()
                     else:
-                        is_question = False
-                        next_question = None
-                        if is_question:
-                            pass
-                        message = cls.save_user_message(body, user_id, data, is_question, next_question)
+                        message = cls.save_user_message(body, user_id)
                     result = cls.process_reply(user_id,body, message)
                     response = result['response']
-                    if is_question:
-                        message = cls.save_user_message(response, user_id, data, False)
-                    else:
-                        message = cls.create_message(response, user_id, result, 0)
-                        if result.get('finish',False):
-                            text = MSG_STRING.NEED_RIBO[random.randint(0, len(MSG_STRING.NEED_RIBO)-1)]
-                            message2 = cls.create_message(text, user_id, result, 0)
-                            messages.append(message2)
-                    messages.append(message)
+                    res_message = cls.create_message(response, user_id, result, 0)
+                    if result.get('finish',False):
+                        text = MSG_STRING.NEED_RIBO[random.randint(0, len(MSG_STRING.NEED_RIBO)-1)]
+                        res_message2 = cls.create_message(text, user_id, result, 0)
+                        messages.append(res_message2)
+                    messages.append(res_message)
                     return reversed(messages)
                 except Exception as e:
                     raise e
 
 
     @classmethod
-    def save_user_message(cls, body, user_id, data, is_question=False, next_question=None,**kwargs):
-        if is_question:
-            message = Message()
-            message['user_id'] = user_id
-            message.content = ContentMessage(question_text=body, answer_text='',from_who=1)
-            message['action'] = None
-            message['next_question_id'] = None
-            if next_question:
-                message.next_question_id = next_question.id
-        else:
-            message = Message.objects(user_id=user_id).order_by("-id")[0]
-            message['content']['answer_text'] = body
-            message['updated_at'] = timezone.now()
+    def save_user_message(cls, body, user_id, **kwargs):
+        message = Message.objects(user_id=user_id).order_by("-id")[0]
+        message['content']['answer_text'] = body
+        message['updated_at'] = timezone.now()
         message.save()
         return message
 
@@ -94,6 +78,7 @@ class ConversationService(BaseService):
         message['user_id'] = user_id
         message.content = ContentMessage(question_text=text, answer_text='', from_who=0)
         message['action'] = data.get('action','')
+        message['slots'] = data.get('list_slots',[])
         message['next_question_id'] = None
         if next_question:
             message.next_question_id = next_question.id
@@ -110,6 +95,7 @@ class ConversationService(BaseService):
         response = fulfillment.get('speech','')
         result = None
         finish = False
+        data = {}
         if 'reminder' in action:
             if action == 'reminders.add':
                 task_data = {
@@ -119,12 +105,12 @@ class ConversationService(BaseService):
                 date_time = params.get('date-time', [])
                 name = params.get('name', '')
                 recurrences = params.get('recurrence', [])
-                if recurrences and recurrences[0] != Recurrence.RECURRENCE_NONE:
-                    task_data['repeat_days'] = cls.get_datetime(params)
+                task_data['at_time'] = []
                 if date_time:
                     if '/' in date_time[0]:
                         date_time = date_time.split('/')
-                    task_data['at_time'] = []
+                    if recurrences and (recurrences[0] in Recurrence.RECURRENCE_WEEKLY) and ('weekly' not in recurrences):
+                        date_time = cls.get_datetime(params)
                     for date in date_time:
                         date = Utils.parse_datetime(date)
                         task_data['at_time'].append(date)
@@ -164,9 +150,9 @@ class ConversationService(BaseService):
                         if item['at_time']:
                             at_time = datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y at %I:%M %p')
                             response += at_time
+                    data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
-                finish = True
             elif action == 'reminders.reschedule':
                 pass
             elif action == 'reminders.remove':
@@ -177,26 +163,28 @@ class ConversationService(BaseService):
             pass
         message['action'] = action
         message.save()
-        data = {
+        data.update({
             'response' : response,
             'finish': finish,
-            'result' : result
-        }
+            'result': result
+        })
         return data
 
 
     @classmethod
     def get_datetime(cls,data):
-        recurrences = data.get('recurrence', '')
-        date_time = []
+        recurrences = data.get('recurrence', [])
+        list_times = data.get('date-time', [])
+        list_date_time = []
+        result = []
         for _recur in recurrences:
             if _recur in Recurrence.RECURRENCE_WEEKLY:
                 date_number = weekday[_recur]
-                date_time.append(Utils.next_weekday(date_number))
-            elif _recur == Recurrence.RECURRENCE_WEEKENDS:
-                date_time.append(Utils.next_weekday(weekday['sat']))
-                date_time.append(Utils.next_weekday(weekday['sun']))
-        return date_time
+                list_date_time.append(Utils.next_weekday(date_number))
+        for time in list_times:
+            for date in list_date_time:
+                result.append(date +'T'+ parser.parse(time).time().strftime('%H:%M:%S') + 'Z')
+        return result
 
     @classmethod
     def prepare_query_date(cls,date, start=False):

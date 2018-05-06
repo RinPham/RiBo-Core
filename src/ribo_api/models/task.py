@@ -10,7 +10,6 @@ class Task(Document):
     type = fields.IntField(default=TaskType.NONE)
     done = fields.BooleanField(default=False)
     repeat = fields.IntField(default=False) # 0: None, 1: Daily, 2: Weekly, 3: Weekdays
-    repeat_days = fields.ListField(fields.StringField(default=None))
     email = fields.StringField(null=True)
     phone_number = fields.StringField(null=True)
 
