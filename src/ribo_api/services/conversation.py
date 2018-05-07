@@ -121,9 +121,9 @@ class ConversationService(BaseService):
                         task_data['at_time'].append(date)
                 if name:
                     task_data['title'] = name
-                    if 'call' in name:
+                    if 'call' in name.lower():
                         task_data['type'] = TaskType.CALL
-                    elif 'email' in name:
+                    elif 'email' in name.lower():
                         task_data['type'] = TaskType.EMAIL
                 if name and date_time and recurrences:
                     task_data['recurrence'] = recurrences
@@ -134,27 +134,28 @@ class ConversationService(BaseService):
                 date = params.get('date-time','')
                 name = params.get('name','')
                 if '/' in date:
-                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True), tz)
-                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False), tz)
+                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
                 elif date:
                     try:
                         datetime.datetime.strptime(date, '%Y-%m-%d')
-                        query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True), tz)
-                        query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False), tz)
+                        query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                        query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
                     except ValueError:
-                        query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz)
+                        query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
                 if name:
                     query_data['title__contains'] = name
-                result = TaskService.get_task(query_data)
+                result = TaskService.get_task(query_data,tz=tz)
                 if result:
                     response = 'Your reminders: '
                     list_slots = []
                     for i,item in enumerate(result):
                         list_slots.append(json.dumps(dict(item)))
-                        response += "\n" + str(i) + ". " + item['title'] + " on "
-                        if item['at_time']:
-                            at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
-                            response += at_time
+                        if i <= 3:
+                            response += "\n" + str(i) + ". " + item['title'] + " on "
+                            if item['at_time']:
+                                at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
+                                response += at_time
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER

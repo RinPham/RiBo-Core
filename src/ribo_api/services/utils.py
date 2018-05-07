@@ -491,6 +491,18 @@ class Utils:
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(tz)
         return tz.normalize(local_dt)
 
+    @classmethod
+    def in_weekdays(cls, start_day, end_day):
+        list = [start_day, end_day]
+        while(1):
+            if start_day + 1 != end_day:
+                start_day = start_day + 1 if start_day + 1 < 7 else start_day + 1 - 7
+                list.append(start_day)
+            else:
+                break
+        return list
+
+
     """
     @staticmethod
     def get_tz(phone_number):

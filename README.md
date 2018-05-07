@@ -91,3 +91,7 @@ Django 1.9.7
         ```
         http://apidocjs.com/index.html#params
         ```
+
+
+    RUN AS SERVICE:
+    sudo systemctl stop gunicorn_ribo.service
