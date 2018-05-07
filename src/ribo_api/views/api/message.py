@@ -7,13 +7,13 @@ from ribo_api.services.utils import Utils
 
 
 class MessageViewSet(ViewSet):
-    view_set = 'task'
+    view_set = 'messages'
     serializer_class = MessageSerializer
 
     def list(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
-        @api {GET} /task Get list task
+        @api {GET} /messages Get list task
         @apiName TaskList
         @apiGroup Ribo_api Task
         @apiPermission Authentication

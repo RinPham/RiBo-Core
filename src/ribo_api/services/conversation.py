@@ -1,5 +1,7 @@
 import json
 import random
+
+import pytz
 from django.db import transaction
 from django.utils import timezone
 import datetime
@@ -12,6 +14,8 @@ from ribo_api.services.task import TaskService
 from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
 from dateutil import parser
+
+from ribo_core.utilstz import get_local_time
 
 
 class ConversationService(BaseService):
@@ -37,6 +41,7 @@ class ConversationService(BaseService):
     def reply(cls, data, **kwargs):
         user_id = data.get("user_id",0)
         body = data.get("body","")
+        tz = pytz.timezone(data.get('tz', 'Asia/Bangkok'))
         messages = []
         if body:
             with transaction.atomic():
@@ -51,7 +56,7 @@ class ConversationService(BaseService):
                         message.save()
                     else:
                         message = cls.save_user_message(body, user_id)
-                    result = cls.process_reply(user_id,body, message)
+                    result = cls.process_reply(user_id,body, message,tz=tz)
                     response = result['response']
                     res_message = cls.create_message(response, user_id, result, 0)
                     if result.get('finish',False):
@@ -87,7 +92,7 @@ class ConversationService(BaseService):
 
 
     @classmethod
-    def process_reply(cls,user_id, text, message):
+    def process_reply(cls,user_id, text, message, tz):
         ai_result = ApiAIService.get_result(user_id,text)
         params = ai_result['parameters']
         action = ai_result['action']
@@ -112,7 +117,7 @@ class ConversationService(BaseService):
                     if recurrences and (recurrences[0] in Recurrence.RECURRENCE_WEEKLY) and ('weekly' not in recurrences):
                         date_time = cls.get_datetime(params)
                     for date in date_time:
-                        date = Utils.parse_datetime(date)
+                        date = Utils.parse_datetime(date, tz)
                         task_data['at_time'].append(date)
                 if name:
                     task_data['title'] = name
@@ -129,15 +134,15 @@ class ConversationService(BaseService):
                 date = params.get('date-time','')
                 name = params.get('name','')
                 if '/' in date:
-                    query_data['at_time__gte'] = cls.prepare_query_date(date.split('/')[0], start=True)
-                    query_data['at_time__lte'] = cls.prepare_query_date(date.split('/')[1], start=False)
+                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True), tz)
+                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False), tz)
                 elif date:
                     try:
                         datetime.datetime.strptime(date, '%Y-%m-%d')
-                        query_data['at_time__gte'] = cls.prepare_query_date(date, start=True)
-                        query_data['at_time__lte'] = cls.prepare_query_date(date, start=False)
+                        query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True), tz)
+                        query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False), tz)
                     except ValueError:
-                        query_data['at_time'] = cls.prepare_query_date(date)
+                        query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz)
                 if name:
                     query_data['title__contains'] = name
                 result = TaskService.get_task(query_data)
@@ -148,7 +153,7 @@ class ConversationService(BaseService):
                         list_slots.append(json.dumps(dict(item)))
                         response += "\n" + str(i) + ". " + item['title'] + " on "
                         if item['at_time']:
-                            at_time = datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y at %I:%M %p')
+                            at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
                             response += at_time
                     data.update({'list_slots':list_slots})
                 else:

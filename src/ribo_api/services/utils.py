@@ -1,3 +1,5 @@
+import pytz
+
 __author__ = "thqbop"
 __date__ = "$Mar 05, 2018$"
 __all__ = ['Utils']
@@ -467,20 +469,27 @@ class Utils:
         return (date + timedelta(days=day_gap)).strftime('%Y-%m-%d')
 
     @classmethod
-    def parse_datetime(cls,date_time):
+    def parse_datetime(cls,date_time, tz):
         try:
-            datetime.strptime(date_time, '%Y-%m-%dT%H:%M:%SZ')
+            date_time = datetime.strptime(date_time, '%Y-%m-%dT%H:%M:%SZ')
         except ValueError:
             try:
-                datetime.strptime(date_time, '%Y-%m-%d')
-                date_time = date_time + 'T' + '7:00:00Z'
+                date_time = datetime.strptime(date_time, '%Y-%m-%d')
+                date_time = date_time + timedelta(hours=7)
             except ValueError:
                 try:
-                    datetime.strptime(date_time, '%H:%M:%S')
-                    date_time = datetime.today().strftime('%Y-%m-%d') + 'T' + date_time + 'Z'
+                    date_time = datetime.strptime(date_time, '%H:%M:%S')
+                    date_time = datetime.combine(datetime.today(), date_time.time())
                 except ValueError as e:
                     raise e
+        local_dt = tz.localize(date_time, is_dst=None)
+        date_time = local_dt.astimezone(tz)
         return date_time
+
+    @classmethod
+    def utc_to_local(cls, utc_dt, tz):
+        local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(tz)
+        return tz.normalize(local_dt)
 
     """
     @staticmethod
