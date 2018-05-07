@@ -7,6 +7,7 @@ from django.utils import timezone
 import datetime
 from ribo_api.const import TaskType, Recurrence, weekday
 from ribo_api.models.message import Message, ContentMessage
+from ribo_api.models.task import Task
 from ribo_api.serializers.message import  MessageSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import ApiAIService
@@ -92,7 +93,7 @@ class ConversationService(BaseService):
 
 
     @classmethod
-    def process_reply(cls,user_id, text, message, tz):
+    def process_reply(cls,user_id, text, message, tz, **kwargs):
         ai_result = ApiAIService.get_result(user_id,text)
         params = ai_result['parameters']
         action = ai_result['action']
@@ -128,28 +129,15 @@ class ConversationService(BaseService):
                 if name and date_time and recurrences:
                     task_data['recurrence'] = recurrences
                     result = TaskService.create_task(data=task_data)
+                    message['slots'] = [result]
                     finish = True
             elif action == 'reminders.get':
-                query_data = { 'user_id': user_id}
-                date = params.get('date-time','')
-                name = params.get('name','')
-                if '/' in date:
-                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                elif date:
-                    try:
-                        datetime.datetime.strptime(date, '%Y-%m-%d')
-                        query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                        query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                    except ValueError:
-                        query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                if name:
-                    query_data['title__contains'] = name
-                result = TaskService.get_task(query_data,tz=tz)
-                if result:
+                query_data = cls.prepare_query(user_id,params,tz)
+                results = TaskService.get_task(query_data,tz=tz)
+                if results:
                     response = 'Your reminders: '
                     list_slots = []
-                    for i,item in enumerate(result):
+                    for i,item in enumerate(results):
                         list_slots.append(json.dumps(dict(item)))
                         if i <= 3:
                             response += "\n" + str(i) + ". " + item['title'] + " on "
@@ -162,7 +150,20 @@ class ConversationService(BaseService):
             elif action == 'reminders.reschedule':
                 pass
             elif action == 'reminders.remove':
-                pass
+                query_data = cls.prepare_query(user_id, params,tz)
+                if query_data:
+                    results = TaskService.get_task(query_data, tz=tz)
+                    all = params.get('all', False)
+                    if all:
+                        for item in results:
+                            task = Task.objects(id=item['id'])
+                            task.delete()
+                    else:
+                        task = Task.objects(id=results[0]['id'])
+                        task.delete()
+                elif kwargs.get('task_id', None):
+                    task = Task.objects(id=kwargs.get('task_id'))
+                    task.delete()
             elif action == 'reminders.rename':
                 pass
         elif 'event' in action:
@@ -210,6 +211,34 @@ class ConversationService(BaseService):
                 except ValueError as e:
                     raise e
         return date
+
+    @classmethod
+    def prepare_query(cls, user_id, params, tz):
+        if params.get('date-time', '') or params.get('name', ''):
+            query_data = {'user_id': user_id}
+            date = params.get('date-time', '')
+            name = params.get('name', '')
+            time_period = params.get('time-period','')
+            if '/' in date:
+                query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True),
+                                                                  tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False),
+                                                                  tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+            elif date:
+                try:
+                    datetime.datetime.strptime(date, '%Y-%m-%d')
+                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True),
+                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False),
+                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                except ValueError:
+                    query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime(
+                        '%Y-%m-%dT%H:%M:%SZ')
+            if name:
+                query_data['title__contains'] = name
+            return query_data
+        else:
+            return None
 
 
 
