@@ -36,7 +36,7 @@ class TaskService(BaseService):
 
     @classmethod
     def get_task(cls,data, **kwargs):
-        query = cls.prepare_filter(data,kwargs)
+        query = cls.prepare_filter(data, **kwargs)
         items = list(Task.objects(query).order_by('at_time'))
         _temp_items = [item for item in items]
         tz = kwargs.get('tz', pytz.timezone('Asia/Bangkok'))
@@ -81,7 +81,7 @@ class TaskService(BaseService):
         return items
 
     @classmethod
-    def prepare_filter(cls,data,**kwargs):
+    def prepare_filter(cls, data, **kwargs):
         if kwargs.get('exclude_done', False):
             q = Q(user_id=data.get('user_id', ''))
         else:
