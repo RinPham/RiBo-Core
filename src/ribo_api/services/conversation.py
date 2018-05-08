@@ -9,6 +9,7 @@ from ribo_api.const import TaskType, Recurrence, weekday
 from ribo_api.models.message import Message, ContentMessage
 from ribo_api.models.task import Task
 from ribo_api.serializers.message import  MessageSerializer
+from ribo_api.serializers.task import TaskSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import ApiAIService
 from ribo_api.services.task import TaskService
@@ -133,44 +134,61 @@ class ConversationService(BaseService):
                     finish = True
             elif action == 'reminders.get':
                 query_data = cls.prepare_query(user_id,params,tz)
-                results = TaskService.get_task(query_data,tz=tz)
+                results = TaskService.get_task(query_data, exclude_done=False, tz=tz)
                 if results:
                     response = 'Your reminders: '
                     list_slots = []
                     for i,item in enumerate(results):
                         list_slots.append(json.dumps(dict(item)))
                         if i <= 3:
-                            response += "\n" + str(i) + ". " + item['title'] + " on "
-                            if item['at_time']:
-                                at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
-                                response += at_time
+                            at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
+                            response += MSG_STRING.REMINDER_ITEM.format(str(i),item['title'],at_time)
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
             elif action == 'reminders.reschedule':
                 pass
             elif action == 'reminders.remove':
-                query_data = cls.prepare_query(user_id, params,tz)
-                if query_data:
-                    results = TaskService.get_task(query_data, tz=tz)
-                    all = params.get('all', False)
-                    if all:
+                list_slots = []
+                all = params.get('all', False)
+                if kwargs.get('task_id', None) and not all:
+                    task = Task.objects(id=kwargs.get('task_id'), user_id=user_id)
+                    list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                else:
+                    query_data = cls.prepare_query(user_id, params,tz)
+                    results = TaskService.get_task(query_data, exclude_done=True, tz=tz)
+                    if results:
                         for item in results:
-                            task = Task.objects(id=item['id'])
-                            task.delete()
+                            list_slots.append(json.dumps(dict(item)))
+                        if all:
+                            response = MSG_STRING.REMOVE_ALL_REMINDER_CONFIRM
+                        else:
+                            if params.get('date-time', '') or params.get('name', ''):
+                                list_slots = [json.dumps(dict(results[0]))]
+                                at_time = Utils.utc_to_local(
+                                    datetime.datetime.strptime(results[0]['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime(
+                                    '%b %d, %Y at %I:%M %p')
+                                response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(results[0]['title'], at_time)
+                            else:
+                                response = "Which reminder do you want to remove?"
+                                for i, item in enumerate(results):
+                                    at_time = Utils.utc_to_local(
+                                        datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime(
+                                        '%b %d, %Y at %I:%M %p')
+                                    response += MSG_STRING.REMINDER_ITEM.format(str(i), item['title'], at_time)
                     else:
-                        task = Task.objects(id=results[0]['id'])
-                        task.delete()
-                elif kwargs.get('task_id', None):
-                    task = Task.objects(id=kwargs.get('task_id'))
-                    task.delete()
+                        response = MSG_STRING.NO_REMINDER_REMOVE
+                data.update({'list_slots': list_slots})
             elif action == 'reminders.rename':
                 pass
         elif 'event' in action:
             pass
-        message['action'] = action
-        message.save()
+        elif action == 'smalltalk.confirmation.yes':
+            response = cls.process_confirm_yes(message)
+        elif action == 'smalltalk.confirmation.no':
+            response = 'OK'
         data.update({
+            'action': action,
             'response' : response,
             'finish': finish,
             'result': result
@@ -214,31 +232,41 @@ class ConversationService(BaseService):
 
     @classmethod
     def prepare_query(cls, user_id, params, tz):
-        if params.get('date-time', '') or params.get('name', ''):
-            query_data = {'user_id': user_id}
-            date = params.get('date-time', '')
-            name = params.get('name', '')
-            time_period = params.get('time-period','')
-            if '/' in date:
-                query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True),
+        query_data = {'user_id': user_id}
+        date = params.get('date-time', '')
+        name = params.get('name', '')
+        time_period = params.get('time-period','')
+        if '/' in date:
+            query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True),
+                                                              tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+            query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False),
+                                                              tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+        elif date:
+            try:
+                datetime.datetime.strptime(date, '%Y-%m-%d')
+                query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True),
                                                                   tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False),
+                query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False),
                                                                   tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-            elif date:
-                try:
-                    datetime.datetime.strptime(date, '%Y-%m-%d')
-                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True),
-                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False),
-                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                except ValueError:
-                    query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime(
-                        '%Y-%m-%dT%H:%M:%SZ')
-            if name:
-                query_data['title__contains'] = name
-            return query_data
-        else:
-            return None
+            except ValueError:
+                query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime(
+                    '%Y-%m-%dT%H:%M:%SZ')
+        if name:
+            query_data['title__contains'] = name
+        return query_data
 
+    @classmethod
+    def process_confirm_yes(cls, message):
+        response = ''
+        if message.action == 'reminders.remove':
+            for item in message.slots:
+                try:
+                    data = json.loads(item)
+                    task = Task.objects(id=data['id'])
+                    task.delete()
+                except Exception:
+                    pass
+            response = 'I removed it'
+        return response
 
 

@@ -36,8 +36,8 @@ class TaskService(BaseService):
 
     @classmethod
     def get_task(cls,data, **kwargs):
-        query = cls.prepare_filter(data)
-        items = list(Task.objects(query))
+        query = cls.prepare_filter(data,kwargs)
+        items = list(Task.objects(query).order_by('at_time'))
         _temp_items = [item for item in items]
         tz = kwargs.get('tz', pytz.timezone('Asia/Bangkok'))
         if data.get('at_time__gte', ''):
@@ -81,8 +81,12 @@ class TaskService(BaseService):
         return items
 
     @classmethod
-    def prepare_filter(cls,data):
-        q = Q(user_id=data.get('user_id', '')) & Q(done=False)
+    def prepare_filter(cls,data,**kwargs):
+        if kwargs.get('exclude_done', False):
+            q = Q(user_id=data.get('user_id', ''))
+        else:
+            q = Q(user_id=data.get('user_id', '')) & Q(done=False)
+
         if data.get('at_time__gte',''):
             q = q & Q(at_time__gte=data.get('at_time__gte','')) & Q(at_time__lte=data.get('at_time__lte','')) | Q(repeat__ne=TypeRepeat.NONE)
         elif data.get('at_time',''):
