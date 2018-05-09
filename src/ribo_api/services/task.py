@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import pytz
 from mongoengine.queryset.visitor import Q
 
-from ribo_api.const import TypeRepeat, Recurrence, weekday_str
+from ribo_api.const import TypeRepeat, Recurrence, weekday_str, TaskType
 from ribo_api.models.task import Task
 from ribo_api.serializers.task import TaskSerializer
 from ribo_api.services.base import BaseService
@@ -47,37 +47,66 @@ class TaskService(BaseService):
         elif data.get('at_time', ''):
             at_time = datetime.strptime(data.get('at_time', ''), '%Y-%m-%dT%H:%M:%SZ')
         for item in _temp_items:
-            at_time_item = Utils.utc_to_local(item['at_time'], tz)
-            # check time of at_time in time intervals or equal time of search, endless remove
-            if data.get('at_time__gte', ''):
-                if (at_time__gte.time() >= at_time_item.time()) and (at_time__lte.time() <= at_time_item.time()):
-                    items.remove(item)
-                    continue
-            elif data.get('at_time', ''):
-                if at_time.time() != at_time_item.time():
-                    items.remove(item)
-                    continue
-            # check weekday of at_time in time intervals or equal weekday of search, endless remove
-            if item['repeat'] == TypeRepeat.WEEKLY or item['repeat'] == TypeRepeat.WEEKDAYS or item['repeat'] == TypeRepeat.WEEKENDS:
+            if item['repeat'] != TypeRepeat.NONE:
+                should_remove = False
+                at_time_item = Utils.utc_to_local(item['at_time'], tz)
+                # check time of at_time in time intervals or equal time of search, endless remove
                 if data.get('at_time__gte', ''):
-                    if at_time_item.weekday() not in Utils.in_weekdays(at_time__gte.weekday(), at_time__lte.weekday()):
+                    # if time of search overnight (start-day != end-day), check at_time > start-time or < end-time
+                    # if time of serach in day (start-day == end-day), check at_time > start-time and < end-time
+                    if not ((at_time__gte.time() <= at_time_item.time()) and (at_time_item.time() <= at_time__lte.time())
+                            and at_time__gte.day == at_time__lte.day) \
+                        or not (((at_time__gte.time() <= at_time_item.time()) or (at_time__gte.time() <= at_time_item.time()))
+                                 and at_time__gte.day != at_time__lte.day):
                         items.remove(item)
+                        continue
+
+                    interval_day = Utils.in_weekdays(at_time__gte.weekday(), at_time__lte.weekday())
+                    if (at_time__gte.weekday() == at_time_item.weekday()) and (
+                        at_time__gte.time() > at_time_item.time()):
+                        should_remove = True
+                    elif at_time__lte.weekday() == at_time_item.weekday() and (
+                        at_time__lte.time() < at_time_item.time()):
+                        should_remove = True
                 elif data.get('at_time', ''):
-                    if at_time.weekday() != at_time_item.weekday():
+                    if at_time.time() != at_time_item.time():
                         items.remove(item)
-            # check day of month of at_time in time intervals or equal day of month of search, endless remove
-            elif item['repeat'] == TypeRepeat.MONTHLY:
-                if data.get('at_time__gte', ''):
-                    # if month of interval of search time > 2 or (day of at_time in interval of search time with same month)
-                    if not ((at_time__lte.month - at_time__gte.month >= 2)
-                            or ((at_time__gte.day <= at_time_item.day <= at_time__gte.day)
-                                and at_time__lte.month - at_time__gte.month < 1)
-                            or (((at_time__gte.day <= at_time_item.day) or (at_time_item.day <= at_time__gte.day))
-                                and (at_time__lte.month - at_time__gte.month == 1))):
-                        items.remove(item)
-                elif data.get('at_time', ''):
-                    if at_time.day != at_time_item.day:
-                        items.remove(item)
+                        continue
+                # check weekday of at_time in time intervals or equal weekday of search, endless remove
+                if item['repeat'] == TypeRepeat.WEEKLY:
+                    if data.get('at_time__gte', ''):
+                        if (at_time_item.weekday() not in interval_day) or should_remove:
+                            items.remove(item)
+                    elif data.get('at_time', ''):
+                        if at_time.weekday() != at_time_item.weekday():
+                            items.remove(item)
+                elif item['repeat'] == TypeRepeat.WEEKDAYS:
+                    if data.get('at_time__gte', ''):
+                        if interval_day == [6] or interval_day == [5] or interval_day == [5,6] or interval_day == [6,5] or should_remove:
+                            items.remove(item)
+                    elif data.get('at_time', ''):
+                        if at_time.weekday() not in [0,1,2,3,4]:
+                            items.remove(item)
+                elif item['repeat'] == TypeRepeat.WEEKENDS:
+                    if data.get('at_time__gte', ''):
+                        if (not (interval_day == [6] or interval_day == [5] or interval_day == [5,6] or interval_day == [6,5])) or should_remove:
+                            items.remove(item)
+                    elif data.get('at_time', ''):
+                        if at_time.weekday() not in [5,6]:
+                            items.remove(item)
+                # check day of month of at_time in time intervals or equal day of month of search, endless remove
+                elif item['repeat'] == TypeRepeat.MONTHLY:
+                    if data.get('at_time__gte', ''):
+                        # if month of interval of search time > 2 or (day of at_time in interval of search time with same month)
+                        if not ((at_time__lte.month - at_time__gte.month >= 2)
+                                or ((at_time__gte.day <= at_time_item.day <= at_time__gte.day)
+                                    and at_time__lte.month - at_time__gte.month < 1)
+                                or (((at_time__gte.day <= at_time_item.day) or (at_time_item.day <= at_time__gte.day))
+                                    and (at_time__lte.month - at_time__gte.month == 1))):
+                            items.remove(item)
+                    elif data.get('at_time', ''):
+                        if at_time.day != at_time_item.day:
+                            items.remove(item)
         items = TaskSerializer(items, many=True).data
         return items
 
@@ -143,9 +172,9 @@ class TaskService(BaseService):
             task.user_id = data['user_id']
             task.title = data['title']
             task.at_time = data['at_time']
-            task.repeat = data['repeat']
-            task.type = data['type']
-            task.done = data['done']
+            task.repeat = data.get('repeat', TypeRepeat.NONE)
+            task.type = data.get('type', TaskType.NONE)
+            task.done = data.get('done', False)
             task.save()
             return task
         except Exception as e:

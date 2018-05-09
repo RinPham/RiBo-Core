@@ -13,12 +13,11 @@ class ApiAiError(Exception):
     pass
 
 
-def req(logger, access_token, meth, path, params, **kwargs):
+def req(access_token, meth, path, params, **kwargs):
     full_url = API_AI_HOST + path + '?v='+API_AI_VERSION
-    logger.debug('%s %s %s', meth, full_url, params)
     headers = {
-        'authorization': 'Bearer ' + access_token
-        # 'accept': 'application/vnd.wit.' + API_AI_VERSION + '+json'
+        'authorization': 'Bearer ' + access_token,
+        'content-type': 'application/json'
     }
     headers.update(kwargs.pop('headers', {}))
     rsp = requests.request(
@@ -30,13 +29,12 @@ def req(logger, access_token, meth, path, params, **kwargs):
         **kwargs
     )
     if rsp.status_code > 200:
-        raise ApiAiError('Wit responded with status: ' + str(rsp.status_code) +
+        raise ApiAiError('Dialogflow responded with status: ' + str(rsp.status_code) +
                        ' (' + rsp.reason + ')')
     json = rsp.json()
     if 'error' in json:
-        raise ApiAiError('Wit responded with an error: ' + json['error'])
+        raise ApiAiError('Dialogflow responded with an error: ' + json['error'])
 
-    logger.debug('%s %s %s', meth, full_url, json)
     return json
 
 class DialogFlow(object):
@@ -78,6 +76,11 @@ class ApiAIService(BaseService):
         ai = DialogFlow()
         response = ai.get_query(text, user_id=user_id)
         return response
+
+    @classmethod
+    def del_contents(cls, user_id, **kwargs):
+        res = req(settings.APIAI_CLIENT_ACCESS_TOKEN, 'delete', 'contexts', {'sessionId':user_id})
+        return res
 
 
 

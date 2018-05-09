@@ -103,6 +103,9 @@ class ConversationService(BaseService):
         action = ai_result['action']
         fulfillment = ai_result['fulfillment']
         response = fulfillment.get('speech','')
+        if 'cancel' in text.lower():
+            ApiAIService.del_contents(user_id)
+            action = 'confirmation.no'
         result = None
         finish = False
         data = {}
@@ -148,8 +151,6 @@ class ConversationService(BaseService):
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
-            elif action == 'reminders.reschedule':
-                pass
             elif action == 'reminders.remove':
                 list_slots = []
                 all = params.get('all', False)
@@ -179,13 +180,40 @@ class ConversationService(BaseService):
                         response = MSG_STRING.NO_REMINDER_REMOVE
                 data.update({'list_slots': list_slots})
             elif action == 'reminders.rename':
-                pass
+                list_slots = []
+                old_name = params.get('old-name', '')
+                new_name = params.get('name', '')
+                kwargs['task_id'] = "5af2f08ce3d8ee0e0c3b9703"
+                if kwargs.get('task_id', None):
+                    if old_name:
+                        task = Task.objects(id=kwargs.get('task_id'))[0]
+                        cur_name = task.title
+                        task.title = old_name
+                        task.save()
+                        list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                        response = 'I renamed reminder about {0} to {1}'.format(cur_name, old_name)
+                        ApiAIService.del_contents(user_id)
+                    else:
+                        response = "What's the new name?"
+                else:
+                    if old_name and new_name:
+                        task = Task.objects(title__icontains=old_name, user_id=user_id)
+                        if task:
+                            task = task[0]
+                            task.title = new_name
+                            task.save()
+                            list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                            response = 'I renamed reminder about {0} to {1}'.format(old_name,new_name)
+                        else:
+                            response = "I didn't found the reminder."
+                data.update({'list_slots': list_slots})
         elif 'event' in action:
             pass
-        elif action == 'smalltalk.confirmation.yes':
+        elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
-        elif action == 'smalltalk.confirmation.no':
+        elif action == 'confirmation.no':
             response = 'OK'
+            ApiAIService.del_contents(user_id)
         data.update({
             'action': action,
             'response' : response,
