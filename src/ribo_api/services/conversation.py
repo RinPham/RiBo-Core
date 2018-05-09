@@ -141,8 +141,7 @@ class ConversationService(BaseService):
                     for i,item in enumerate(results):
                         list_slots.append(json.dumps(dict(item)))
                         if i <= 3:
-                            at_time = Utils.utc_to_local(datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime('%b %d, %Y at %I:%M %p')
-                            response += MSG_STRING.REMINDER_ITEM.format(str(i),item['title'],at_time)
+                            response += TaskService.render_reminder_str(i, item, tz)
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
@@ -154,28 +153,25 @@ class ConversationService(BaseService):
                 if kwargs.get('task_id', None) and not all:
                     task = Task.objects(id=kwargs.get('task_id'), user_id=user_id)
                     list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                    at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
+                    response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(task.title, at_time)
                 else:
                     query_data = cls.prepare_query(user_id, params,tz)
                     results = TaskService.get_task(query_data, exclude_done=True, tz=tz)
                     if results:
                         for item in results:
                             list_slots.append(json.dumps(dict(item)))
-                        if all:
+                        if all and not (params.get('date-time', '') or params.get('name', '')):
                             response = MSG_STRING.REMOVE_ALL_REMINDER_CONFIRM
                         else:
-                            if params.get('date-time', '') or params.get('name', ''):
+                            if len(results) == 1:
                                 list_slots = [json.dumps(dict(results[0]))]
-                                at_time = Utils.utc_to_local(
-                                    datetime.datetime.strptime(results[0]['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime(
-                                    '%b %d, %Y at %I:%M %p')
+                                at_time = Utils.utc_to_local_str(results[0]['at_time'], tz)
                                 response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(results[0]['title'], at_time)
                             else:
                                 response = "Which reminder do you want to remove?"
                                 for i, item in enumerate(results):
-                                    at_time = Utils.utc_to_local(
-                                        datetime.datetime.strptime(item['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz).strftime(
-                                        '%b %d, %Y at %I:%M %p')
-                                    response += MSG_STRING.REMINDER_ITEM.format(str(i), item['title'], at_time)
+                                    response += TaskService.render_reminder_str(i, item, tz)
                     else:
                         response = MSG_STRING.NO_REMINDER_REMOVE
                 data.update({'list_slots': list_slots})

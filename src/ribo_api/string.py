@@ -7,7 +7,12 @@ class MSG_STRING(const):
     NO_REMINDER = "You have not any reminders"
 
     #reminder
-    REMINDER_ITEM = '\n {0}. {1} on {2}?'
+    REMINDER_ITEM_NOREPEAT = '\n {0}. {1} on {2}'
+    REMINDER_ITEM_DAILY = '\n {0}. {1} at {2} everyday'
+    REMINDER_ITEM_WEEKLY = '\n {0}. {1} at {2} every {3}'
+    REMINDER_ITEM_WEEKENDS = '\n {0}. {1} at {2} every weekends'
+    REMINDER_ITEM_WEEKDAYS = '\n {0}. {1} at {2} every weekdays'
+    REMINDER_ITEM_MONTHLY = '\n {0}. {1} at {2} every {3} of month'
 
     #remove reminder
     NO_REMINDER_REMOVE = 'There are nothing to delete!'

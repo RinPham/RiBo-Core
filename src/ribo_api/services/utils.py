@@ -492,6 +492,11 @@ class Utils:
         return tz.normalize(local_dt)
 
     @classmethod
+    def utc_to_local_str(cls, at_time, tz):
+        return Utils.utc_to_local(datetime.strptime(at_time, '%Y-%m-%dT%H:%M:%SZ'),
+                                  tz).strftime('%b %d, %Y at %I:%M %p')
+
+    @classmethod
     def in_weekdays(cls, start_day, end_day):
         if start_day != end_day:
             list = [start_day, end_day]
