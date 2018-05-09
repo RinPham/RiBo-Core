@@ -69,7 +69,7 @@ class ConversationService(BaseService):
                     return reversed(messages)
                 except Exception as e:
                     Utils.log_exception(e)
-                    message =  cls.create_message(e, user_id, {}, 0)
+                    message = cls.create_message(e.args[0], user_id, {}, 0)
                     messages.append(message)
                     return messages
 
@@ -204,7 +204,11 @@ class ConversationService(BaseService):
         for _recur in recurrences:
             if _recur in Recurrence.RECURRENCE_WEEKLY:
                 date_number = weekday[_recur]
-                list_date_time.append(Utils.next_weekday(date_number))
+                list_date_time.append(Utils.next_weekday(date_number).strftime('%Y-%m-%d'))
+            elif _recur == Recurrence.RECURRENCE_WEEKENDS:
+                list_date_time.append(Utils.next_weekday(5).strftime('%Y-%m-%d'))
+            elif _recur == Recurrence.RECURRENCE_WEEKDAYS:
+                list_date_time.append(Utils.next_weekday(0).strftime('%Y-%m-%d'))
         for time in list_times:
             for date in list_date_time:
                 result.append(date +'T'+ parser.parse(time).time().strftime('%H:%M:%S') + 'Z')

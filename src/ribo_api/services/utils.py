@@ -459,14 +459,14 @@ class Utils:
         day_gap = weekday - date.weekday()
         if day_gap <= 0:
             day_gap += 7
-        return (date + timedelta(days=day_gap)).strftime('%Y-%m-%d')
+        return (date + timedelta(days=day_gap))
 
     @classmethod
     def last_weekday(cls, weekday, date=datetime.today()):
         day_gap = weekday - date.weekday()
         if day_gap >= 0:
             day_gap -= 7
-        return (date + timedelta(days=day_gap)).strftime('%Y-%m-%d')
+        return (date + timedelta(days=day_gap))
 
     @classmethod
     def parse_datetime(cls,date_time, tz):

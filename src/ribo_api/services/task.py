@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 from mongoengine.queryset.visitor import Q
@@ -126,3 +126,28 @@ class TaskService(BaseService):
                 day_of_month = day_of_month + 'th'
             str_reminder = MSG_STRING.REMINDER_ITEM_MONTHLY.format(str(index), data['title'], time, day_of_month)
         return str_reminder
+
+    @classmethod
+    def save(cls, data):
+        try:
+            if data['repeat'] == TypeRepeat.WEEKENDS:
+                if data['at_time'].weekday() in [0,1,2,3,4]:
+                    date_replace = Utils.next_weekday(5)
+                    data['at_time'] = data['at_time'].replace(year=date_replace.year, month=date_replace.month, day=date_replace.day)
+            elif data['repeat'] == TypeRepeat.WEEKDAYS:
+                if data['at_time'].weekday() in [5,6]:
+                    date_replace = Utils.next_weekday(0)
+                    data['at_time'] = data['at_time'].replace(year=date_replace.year, month=date_replace.month,
+                                                              day=date_replace.day)
+            task = Task()
+            task.user_id = data['user_id']
+            task.title = data['title']
+            task.at_time = data['at_time']
+            task.repeat = data['repeat']
+            task.type = data['type']
+            task.done = data['done']
+            task.save()
+            return task
+        except Exception as e:
+            Utils.log(e)
+            raise e
