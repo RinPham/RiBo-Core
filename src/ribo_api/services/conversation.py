@@ -68,7 +68,10 @@ class ConversationService(BaseService):
                     messages.append(res_message)
                     return reversed(messages)
                 except Exception as e:
-                    raise e
+                    Utils.log_exception(e)
+                    message =  cls.create_message(e, user_id, {}, 0)
+                    messages.append(message)
+                    return messages
 
 
     @classmethod

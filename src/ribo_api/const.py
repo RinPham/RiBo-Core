@@ -60,3 +60,13 @@ weekday = {
     'sun': 6
 }
 
+weekday_str = {
+    'Mon' : 'monday',
+    'Tue' : 'tuesday',
+    'Wed' : 'wednesday',
+    'Thu' : 'thursday',
+    'Fri' : 'friday',
+    'Sat' : 'Saturday',
+    'Sun' : 'Sunday'
+}
+
