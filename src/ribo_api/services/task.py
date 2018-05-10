@@ -54,9 +54,9 @@ class TaskService(BaseService):
                 if data.get('at_time__gte', ''):
                     # if time of search overnight (start-day != end-day), check at_time > start-time or < end-time
                     # if time of serach in day (start-day == end-day), check at_time > start-time and < end-time
-                    if not ((at_time__gte.time() <= at_time_item.time()) and (at_time_item.time() <= at_time__lte.time())
+                    if (not ((at_time__gte.time() <= at_time_item.time()) and (at_time_item.time() <= at_time__lte.time()))
                             and at_time__gte.day == at_time__lte.day) \
-                        or not (((at_time__gte.time() <= at_time_item.time()) or (at_time__gte.time() <= at_time_item.time()))
+                        or (not (((at_time__gte.time() <= at_time_item.time()) or (at_time_item.time() <= at_time__lte.time())))
                                  and at_time__gte.day != at_time__lte.day):
                         items.remove(item)
                         continue
