@@ -44,6 +44,7 @@ class ConversationService(BaseService):
         user_id = data.get("user_id",0)
         body = data.get("body","")
         tz = pytz.timezone(data.get('tz', 'Asia/Bangkok'))
+        object_id = data.get("object_id", None)
         messages = []
         if body:
             with transaction.atomic():
@@ -58,7 +59,7 @@ class ConversationService(BaseService):
                         message.save()
                     else:
                         message = cls.save_user_message(body, user_id)
-                    result = cls.process_reply(user_id,body, message,tz=tz)
+                    result = cls.process_reply(user_id,body, message, object_id=object_id, tz=tz)
                     response = result['response']
                     res_message = cls.create_message(response, user_id, result, 0)
                     if result.get('finish',False):
@@ -154,7 +155,7 @@ class ConversationService(BaseService):
             elif action == 'reminders.remove':
                 list_slots = []
                 all = params.get('all', False)
-                if kwargs.get('task_id', None) and not all:
+                if kwargs.get('object_id', None) and not all:
                     task = Task.objects(id=kwargs.get('task_id'), user_id=user_id)
                     list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
                     at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
@@ -183,8 +184,7 @@ class ConversationService(BaseService):
                 list_slots = []
                 old_name = params.get('old-name', '')
                 new_name = params.get('name', '')
-                kwargs['task_id'] = "5af2f08ce3d8ee0e0c3b9703"
-                if kwargs.get('task_id', None):
+                if kwargs.get('object_id', None):
                     if old_name:
                         task = Task.objects(id=kwargs.get('task_id'))[0]
                         cur_name = task.title
