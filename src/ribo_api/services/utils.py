@@ -487,6 +487,28 @@ class Utils:
         return date_time
 
     @classmethod
+    def parse_start_end_time(cls, date_time_1, date_time_2, tz):
+        try:
+            date_time_1 = datetime.strptime(date_time_1, '%Y-%m-%dT%H:%M:%SZ')
+            date_time_2 = datetime.strptime(date_time_2, '%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            try:
+                date_time_2 = datetime.strptime(date_time_2, '%Y-%m-%dT%H:%M:%SZ')
+                date_time_1 = datetime.strptime(date_time_1, '%H:%M:%S')
+                date_time_1 = date_time_1.replace(year=date_time_2.year, month=date_time_2.month, day=date_time_2.day)
+            except ValueError as e:
+                raise e
+        if date_time_1 < date_time_2:
+            start_time = date_time_1.strftime('%Y-%m-%dT%H:%M:%SZ')
+            end_time = date_time_2.strftime('%Y-%m-%dT%H:%M:%SZ')
+        else:
+            start_time = date_time_2.strftime('%Y-%m-%dT%H:%M:%SZ')
+            end_time = date_time_1.strftime('%Y-%m-%dT%H:%M:%SZ')
+        return cls.parse_datetime(start_time,tz).strftime('%Y-%m-%dT%H:%M:%S%z'), cls.parse_datetime(end_time,tz).strftime('%Y-%m-%dT%H:%M:%S%z')
+
+
+
+    @classmethod
     def utc_to_local(cls, utc_dt, tz):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(tz)
         return tz.normalize(local_dt)

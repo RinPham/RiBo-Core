@@ -12,6 +12,7 @@ from ribo_api.serializers.message import  MessageSerializer
 from ribo_api.serializers.task import TaskSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import ApiAIService
+from ribo_api.services.event import EventService
 from ribo_api.services.task import TaskService
 from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
@@ -210,7 +211,23 @@ class ConversationService(BaseService):
                             response = "I didn't found the reminder."
                 data.update({'list_slots': list_slots})
         elif 'event' in action:
-            pass
+            if action == 'events.add':
+                list_slots = []
+                event_data = {
+                    'user_id': user_id,
+                    'location': params.get('location', ''),
+                }
+                date_time_1 = params.get('date-time-1', None)
+                date_time_2 = params.get('date-time-2', None)
+                name = params.get('name', '')
+                if date_time_1 and date_time_2:
+                    event_data['start_time'], event_data['end_time'] = Utils.parse_start_end_time(date_time_1,date_time_2, tz)
+                if name:
+                    event_data['summary'] = name
+                if date_time_1 and date_time_2 and name:
+                    event = EventService.create_event(event_data)
+                    list_slots.append(json.dumps(event))
+                data.update({'list_slots': list_slots})
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':
