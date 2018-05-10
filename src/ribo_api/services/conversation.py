@@ -135,10 +135,12 @@ class ConversationService(BaseService):
                     elif 'email' in name.lower():
                         task_data['type'] = TaskType.EMAIL
                 if name and date_time and recurrences:
+                    list_slots = []
                     task_data['recurrence'] = recurrences
                     result = TaskService.create_task(data=task_data)
-                    message['slots'] = [result]
+                    list_slots.append(json.dumps(dict(result)))
                     finish = True
+                    data.update({'list_slots': list_slots})
             elif action == 'reminders.get':
                 query_data = cls.prepare_query(user_id,params,tz)
                 results = TaskService.get_task(query_data, exclude_done=False, tz=tz)
