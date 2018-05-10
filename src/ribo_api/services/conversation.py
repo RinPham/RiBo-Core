@@ -293,7 +293,7 @@ class ConversationService(BaseService):
             for item in message.slots:
                 try:
                     data = json.loads(item)
-                    task = Task.objects(id=data['id'])
+                    task = Task.objects(id=data['id'])[0]
                     task.delete()
                 except Exception:
                     pass
