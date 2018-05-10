@@ -156,7 +156,7 @@ class ConversationService(BaseService):
                 list_slots = []
                 all = params.get('all', False)
                 if kwargs.get('object_id', None) and not all:
-                    task = Task.objects(id=kwargs.get('task_id'), user_id=user_id)
+                    task = Task.objects(id=kwargs.get('object_id'), user_id=user_id)
                     list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
                     at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
                     response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(task.title, at_time)
@@ -186,7 +186,7 @@ class ConversationService(BaseService):
                 new_name = params.get('name', '')
                 if kwargs.get('object_id', None):
                     if old_name:
-                        task = Task.objects(id=kwargs.get('task_id'))[0]
+                        task = Task.objects(id=kwargs.get('object_id'))[0]
                         cur_name = task.title
                         task.title = old_name
                         task.save()

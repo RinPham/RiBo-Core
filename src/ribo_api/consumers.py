@@ -8,6 +8,7 @@ from channels.sessions import channel_session
 from ribo_api.models import Channel
 from ribo_api.serializers.message import MessageSerializer
 from ribo_api.services.conversation import ConversationService
+from ribo_api.services.utils import Utils
 
 log = logging.getLogger(__name__)
 
@@ -20,14 +21,14 @@ def ws_connect(message):
     try:
         prefix, user_id = message.content['path'].strip('/').split('/')
         if prefix != 'message':
-            log.debug('invalid ws path=%s', message['path'])
+            Utils.log('invalid ws path=()'.format(message['path']))
             return
         channel = Channel.objects(user_id=user_id)
         if not channel:
             channel = Channel(user_id=user_id)
             channel.save()
     except ValueError:
-        log.debug('invalid ws path=%s', message['path'])
+        Utils.log('invalid ws path={}'.format(message['path']))
         return
 
     # Need to be explicit about the channel layer so that testability works
@@ -43,22 +44,23 @@ def ws_receive(message):
         user_id = message.channel_session['channel']
         channel = Channel.objects(user_id=user_id)[0]
     except KeyError:
-        log.debug('no room in channel_session')
+        Utils.log('no room in channel_session')
         return
     except Channel.DoesNotExist:
-        log.debug('recieved message, but channel does not exist')
+        Utils.log('recieved message, but channel does not exist')
         return
 
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.
     try:
         data = json.loads(message.content['text'])
+        data['object_id'] = '5af2a5f1012a0f6158002137'
     except ValueError:
-        log.debug("ws message isn't json text=%s", data)
+        Utils.log("ws message isn't json text={}".format(data))
         return
 
-    if set(data.keys()) != set(('user_id', 'body')):
-        log.debug("ws message unexpected format data=%s", data)
+    if set(data.keys()) != set(('user_id', 'body', 'object_id')):
+        Utils.log("ws message unexpected format data={}".format(data))
         return
 
     if data:
