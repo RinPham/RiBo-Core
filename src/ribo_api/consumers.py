@@ -54,7 +54,6 @@ def ws_receive(message):
     # conform to the expected message format.
     try:
         data = json.loads(message.content['text'])
-        data['object_id'] = '5af2a5f1012a0f6158002137'
     except ValueError:
         Utils.log("ws message isn't json text={}".format(data))
         return
