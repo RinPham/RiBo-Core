@@ -58,10 +58,6 @@ def ws_receive(message):
         Utils.log("ws message isn't json text={}".format(data))
         return
 
-    if set(data.keys()) != set(('user_id', 'body', 'object_id')):
-        Utils.log("ws message unexpected format data={}".format(data))
-        return
-
     if data:
         # log.debug('chat message room=%s handle=%s message=%s',
         #     channel.user_id, data['handle'], data['message'])
