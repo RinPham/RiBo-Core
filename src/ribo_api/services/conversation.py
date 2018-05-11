@@ -2,6 +2,7 @@ import json
 import random
 
 import pytz
+from boto.beanstalk import response
 from django.db import transaction
 from django.utils import timezone
 import datetime
@@ -13,6 +14,7 @@ from ribo_api.serializers.task import TaskSerializer
 from ribo_api.services.base import BaseService
 from ribo_api.services.dialogflow import ApiAIService
 from ribo_api.services.event import EventService
+from ribo_api.services.oauth import OauthService
 from ribo_api.services.task import TaskService
 from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
@@ -210,7 +212,7 @@ class ConversationService(BaseService):
                         else:
                             response = "I didn't found the reminder."
                 data.update({'list_slots': list_slots})
-        elif 'event' in action:
+        elif 'events' in action:
             if action == 'events.add':
                 list_slots = []
                 event_data = {
@@ -228,6 +230,68 @@ class ConversationService(BaseService):
                     event = EventService.create_event(event_data)
                     list_slots.append(json.dumps(event))
                 data.update({'list_slots': list_slots})
+            elif action == 'events.get':
+                list_slots = []
+                service = OauthService._get_service(user_id)
+                timeMax = ''
+                timeMin = ''
+                date_time = params.get('date-time', [])
+                name = params.get('name', '')
+                location = params.get('location', '')
+                if date_time:
+                    if len(date_time) == 1:
+                        if '/' in date_time[0]:
+                            timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
+                                                              tz)
+                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0].split('/')[1], start=True),
+                                                              tz)
+                        else:
+                            timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
+                                                              tz) + datetime.timedelta(minutes=1))
+                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=True),
+                                                              tz)
+                    elif len(date_time) == 2:
+                        for item in date_time:
+                            pass
+
+                    if timeMax < timeMin:
+                        timeMax, timeMin = timeMin, timeMax
+                    timeMax = timeMax.strftime('%Y-%m-%dT%H:%M:%S%z')
+                    timeMin = timeMin.strftime('%Y-%m-%dT%H:%M:%S%z')
+                query_text = ''
+                if name:
+                    query_text = name
+                if location:
+                    query_text = location + " + " + query_text
+                if date_time:
+                    result = service.events().list(calendarId='primary', timeMax = timeMax, timeMin = timeMin, q=query_text).execute()
+                else:
+                    result = service.events().list(calendarId='primary', q=query_text).execute()
+                items = result.get('items',[])
+                _temp_items = [item for item in items]
+                if (name or location) and _temp_items:
+                    for item in _temp_items:
+                        is_remove = False
+                        if name and item['summary'] != name:
+                            items.remove(item)
+                            is_remove = True
+                        if not is_remove and location and item['location'] != location:
+                            items.remove(item)
+                            is_remove = True
+                        if not is_remove:
+                            list_slots.append(json.dumps(item))
+                if len(items) != 0:
+                    response = 'I found {} events:'.format(len(items))
+                    for i,item in enumerate(items):
+                        if i <= 3:
+                            response += EventService.render_event_str(i, item, tz)
+                else:
+                    response = "I didn't found the events."
+                data.update({'list_slots': list_slots})
+            elif action == 'events.remove':
+                pass
+            elif action == 'events.rename':
+                pass
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':
