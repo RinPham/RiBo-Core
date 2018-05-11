@@ -243,7 +243,7 @@ class ConversationService(BaseService):
                         if '/' in date_time[0]:
                             timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
                                                               tz)
-                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0].split('/')[1], start=True),
+                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0], start=True),
                                                               tz)
                         else:
                             timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
