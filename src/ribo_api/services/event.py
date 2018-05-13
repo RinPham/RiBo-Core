@@ -52,19 +52,19 @@ class EventService(BaseService):
         end_time = end_datetime.strftime('%I:%M %p')
         if not recurrence:
             if start_datetime.date() == end_datetime.date():
-                str_reminder = MSG_STRING.EVENT_ITEM_NOREPEAT.format(str(index), data['summary'], start_time, end_time)
+                str_reminder = MSG_STRING.EVENT_ITEM_NOREPEAT.format(str(index), data.get('summary', '(No title)'), start_time, end_datetime.strftime('%I:%M %p on %b %d, %Y'))
             else:
-                str_reminder = MSG_STRING.EVENT_ITEM_NOREPEAT.format(str(index), data['summary'],
-                                     start_datetime.strftime('%b %d, %Y at %I:%M %p'), end_time.strftime('%b %d, %Y at %I:%M %p'))
+                str_reminder = MSG_STRING.EVENT_ITEM_NOREPEAT.format(str(index), data.get('summary', '(No title)'),
+                                     start_datetime.strftime('%I:%M %p on %b %d, %Y'), end_datetime.strftime('%I:%M %p on %b %d, %Y'))
         elif 'FREQ=DAILY' in recurrence[0]:
-            str_reminder = MSG_STRING.EVENT_ITEM_DAILY.format(str(index), data['summary'], start_time, end_time)
+            str_reminder = MSG_STRING.EVENT_ITEM_DAILY.format(str(index), data.get('summary', '(No title)'), start_time, end_time)
         elif 'FREQ=WEEKLY' in recurrence[0]:
             day_of_week = weekday_str[start_datetime.strftime('%a')]
-            str_reminder = MSG_STRING.EVENT_ITEM_WEEKLY.format(str(index), data['summary'], start_time, end_time, day_of_week)
+            str_reminder = MSG_STRING.EVENT_ITEM_WEEKLY.format(str(index), data.get('summary', '(No title)'), start_time, end_time, day_of_week)
         elif 'BYDAY=MO,TU,WE,TH,FR' in recurrence[0]:
-            str_reminder = MSG_STRING.EVENT_ITEM_WEEKDAYS.format(str(index), data['summary'], start_time, end_time)
+            str_reminder = MSG_STRING.EVENT_ITEM_WEEKDAYS.format(str(index), data.get('summary', '(No title)'), start_time, end_time)
         elif 'BYDAY=SU,SA' in recurrence[0]:
-            str_reminder = MSG_STRING.EVENT_ITEM_WEEKENDS.format(str(index), data['summary'], start_time, end_time)
+            str_reminder = MSG_STRING.EVENT_ITEM_WEEKENDS.format(str(index), data.get('summary', '(No title)'), start_time, end_time)
         elif 'FREQ=MONTHLY' in recurrence[0]:
             day_of_month = str(start_datetime.day)
             if day_of_month[-1] == '1':
@@ -75,5 +75,5 @@ class EventService(BaseService):
                 day_of_month = day_of_month + 'rd'
             else:
                 day_of_month = day_of_month + 'th'
-            str_reminder = MSG_STRING.EVENT_ITEM_MONTHLY.format(str(index), data['summary'], start_time, end_time, day_of_month)
+            str_reminder = MSG_STRING.EVENT_ITEM_MONTHLY.format(str(index), data.get('summary', '(No title)'), start_time, end_time, day_of_month)
         return str_reminder
