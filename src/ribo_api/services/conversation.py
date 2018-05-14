@@ -298,22 +298,22 @@ class ConversationService(BaseService):
                         if events:
                             for event in events:
                                 event_id = event.get('id', None)
-                                event = {
+                                event_data = {
                                     'summary': new_name,
                                     'start': {
-                                        'dateTime': None
+                                        'dateTime': event['start']['dateTime']
                                     },
                                     'end': {
-                                        'dateTime': None
+                                        'dateTime': event['end']['dateTime']
                                     }
                                 }
                                 event = service.events().update(calendarId='primary',
                                                                 eventId=event_id,
-                                                                body=event).execute()
+                                                                body=event_data).execute()
                                 list_slots.append(json.dumps(event))
                             response = 'I renamed events about {0} to {1}'.format(old_name, new_name)
                         else:
-                            response = "I didn't found the reminder."
+                            response = "I didn't found the event."
                 data.update({'list_slots': list_slots})
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
@@ -421,7 +421,7 @@ class ConversationService(BaseService):
         timeMax = ''
         timeMin = ''
         date_time = params.get('date-time', [])
-        name = params.get('name', '')
+        name = params.get('name', '').lower()
         location = params.get('location', '')
         if date_time:
             if len(date_time) == 1:
@@ -460,7 +460,7 @@ class ConversationService(BaseService):
         if (name or location) and _temp_items:
             for item in _temp_items:
                 is_remove = False
-                if name and item['summary'] != name:
+                if name and item['summary'].lower() != name:
                     items.remove(item)
                     is_remove = True
                 if not is_remove and location and item['location'] != location:
