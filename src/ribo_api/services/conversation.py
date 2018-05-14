@@ -232,64 +232,43 @@ class ConversationService(BaseService):
                 data.update({'list_slots': list_slots})
             elif action == 'events.get':
                 list_slots = []
-                service = OauthService._get_service(user_id)
-                timeMax = ''
-                timeMin = ''
-                date_time = params.get('date-time', [])
-                name = params.get('name', '')
-                location = params.get('location', '')
-                if date_time:
-                    if len(date_time) == 1:
-                        if '/' in date_time[0]:
-                            timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
-                                                              tz)
-                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0], start=True),
-                                                              tz)
-                        else:
-                            timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
-                                                              tz) + datetime.timedelta(minutes=1))
-                            timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=True),
-                                                              tz)
-                    elif len(date_time) == 2:
-                        for item in date_time:
-                            pass
-
-                    if timeMax < timeMin:
-                        timeMax, timeMin = timeMin, timeMax
-                    timeMax = timeMax.strftime('%Y-%m-%dT%H:%M:%S%z')
-                    timeMin = timeMin.strftime('%Y-%m-%dT%H:%M:%S%z')
-                query_text = ''
-                if name:
-                    query_text = name
-                if location:
-                    query_text = location + " + " + query_text
-                if date_time:
-                    result = service.events().list(calendarId='primary', timeMax = timeMax, timeMin = timeMin, q=query_text).execute()
-                else:
-                    result = service.events().list(calendarId='primary', q=query_text).execute()
-                items = result.get('items',[])
-                _temp_items = [item for item in items]
-                if (name or location) and _temp_items:
-                    for item in _temp_items:
-                        is_remove = False
-                        if name and item['summary'] != name:
-                            items.remove(item)
-                            is_remove = True
-                        if not is_remove and location and item['location'] != location:
-                            items.remove(item)
-                            is_remove = True
-                        if not is_remove:
-                            list_slots.append(json.dumps(item))
+                items = cls.get_events(params=params, user_id=user_id, tz=tz)
+                for item in items:
+                    list_slots.append(json.dumps(item))
                 if len(items) != 0:
                     response = 'I found {} events:'.format(len(items))
                     for i,item in enumerate(items):
                         if i <= 3:
-                            response += EventService.render_event_str(i, item, tz)
+                            response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
                 else:
                     response = "I didn't found the events."
                 data.update({'list_slots': list_slots})
             elif action == 'events.remove':
-                pass
+                list_slots = []
+                all = params.get('all', False)
+                service = OauthService._get_service(user_id)
+                if kwargs.get('object_id', None) and not all:
+                    event = service.events().get(calendarId='primary', eventId=kwargs.get('object_id', None)).execute()
+                    list_slots.append(json.dumps(event))
+                    response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(event, tz))
+                else:
+                    results = cls.get_events(params, user_id, tz)
+                    if results:
+                        for item in results:
+                            list_slots.append(json.dumps(item))
+                        if all and not (params.get('date-time', '') or params.get('name', '')):
+                            response = MSG_STRING.REMOVE_ALL_EVENTS_CONFIRM
+                        else:
+                            if len(results) == 1:
+                                list_slots = [json.dumps(results[0])]
+                                response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(results[0], tz))
+                            else:
+                                response = "Which event do you want to remove?"
+                                for i, item in enumerate(results):
+                                    response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
+                    else:
+                        response = MSG_STRING.NO_EVENTS_REMOVE
+                data.update({'list_slots': list_slots})
             elif action == 'events.rename':
                 pass
         elif action == 'confirmation.yes':
@@ -381,6 +360,65 @@ class ConversationService(BaseService):
                 except Exception:
                     pass
             response = 'I removed it'
+        elif message.action == 'events.remove':
+            service = OauthService._get_service(message.user_id)
+            for item in message.slots:
+                try:
+                    data = json.loads(item)
+                    service.events().delete(calendarId='primary', eventId=data['id']).execute()
+                except Exception:
+                    pass
+            response = 'I removed it'
         return response
 
+    @classmethod
+    def get_events(cls, params, user_id, tz):
+        service = OauthService._get_service(user_id)
+        timeMax = ''
+        timeMin = ''
+        date_time = params.get('date-time', [])
+        name = params.get('name', '')
+        location = params.get('location', '')
+        if date_time:
+            if len(date_time) == 1:
+                if '/' in date_time[0]:
+                    timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
+                                                   tz)
+                    timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0], start=True),
+                                                   tz)
+                else:
+                    timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
+                                                    tz) + datetime.timedelta(minutes=1))
+                    timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=True),
+                                                   tz)
+            elif len(date_time) == 2:
+                timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
+                                                tz)
+                timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[1], start=True),
+                                               tz)
 
+            if timeMax < timeMin:
+                timeMax, timeMin = timeMin, timeMax
+            timeMax = timeMax.strftime('%Y-%m-%dT%H:%M:%S%z')
+            timeMin = timeMin.strftime('%Y-%m-%dT%H:%M:%S%z')
+        query_text = ''
+        if name:
+            query_text = name
+        if location:
+            query_text = location + " + " + query_text
+        if date_time:
+            result = service.events().list(calendarId='primary', timeMax=timeMax, timeMin=timeMin,
+                                           q=query_text).execute()
+        else:
+            result = service.events().list(calendarId='primary', q=query_text).execute()
+        items = result.get('items', [])
+        _temp_items = [item for item in items]
+        if (name or location) and _temp_items:
+            for item in _temp_items:
+                is_remove = False
+                if name and item['summary'] != name:
+                    items.remove(item)
+                    is_remove = True
+                if not is_remove and location and item['location'] != location:
+                    items.remove(item)
+        return items
