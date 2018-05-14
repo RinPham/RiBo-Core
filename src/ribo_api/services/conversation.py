@@ -270,7 +270,51 @@ class ConversationService(BaseService):
                         response = MSG_STRING.NO_EVENTS_REMOVE
                 data.update({'list_slots': list_slots})
             elif action == 'events.rename':
-                pass
+                list_slots = []
+                old_name = params.get('old-name', '')
+                new_name = params.get('name', '')
+                service = OauthService._get_service(user_id)
+                if kwargs.get('object_id', None):
+                    if old_name:
+                        event = {
+                            'summary': old_name,
+                            'start': {
+                                'dateTime': None
+                            },
+                            'end': {
+                                'dateTime': None
+                            }
+                        }
+                        event = service.events().update(calendarId='primary',
+                                                     eventId=kwargs.get('object_id', None), body=event).execute()
+                        list_slots.append(json.dumps(event))
+                        response = 'I renamed reminder about {0} to {1}'.format(event.get('summary', '(No title)'), old_name)
+                        ApiAIService.del_contents(user_id)
+                    else:
+                        response = "What's the new name?"
+                else:
+                    if old_name and new_name:
+                        events = cls.get_events(params={'name':old_name}, user_id=user_id, tz=tz)
+                        if events:
+                            for event in events:
+                                event_id = event.get('id', None)
+                                event = {
+                                    'summary': new_name,
+                                    'start': {
+                                        'dateTime': None
+                                    },
+                                    'end': {
+                                        'dateTime': None
+                                    }
+                                }
+                                event = service.events().update(calendarId='primary',
+                                                                eventId=event_id,
+                                                                body=event).execute()
+                                list_slots.append(json.dumps(event))
+                            response = 'I renamed events about {0} to {1}'.format(old_name, new_name)
+                        else:
+                            response = "I didn't found the reminder."
+                data.update({'list_slots': list_slots})
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':
