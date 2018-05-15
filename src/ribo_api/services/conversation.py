@@ -152,7 +152,7 @@ class ConversationService(BaseService):
                     list_slots = []
                     for i,item in enumerate(results):
                         list_slots.append(json.dumps(dict(item)))
-                        if i <= 3:
+                        if i < 3:
                             response += TaskService.render_reminder_str(i, item, tz)
                     data.update({'list_slots':list_slots})
                 else:
@@ -181,7 +181,10 @@ class ConversationService(BaseService):
                             else:
                                 response = "Which reminder do you want to remove?"
                                 for i, item in enumerate(results):
-                                    response += TaskService.render_reminder_str(i, item, tz)
+                                    if i < 3:
+                                        response += TaskService.render_reminder_str(i, item, tz)
+                                    else:
+                                        break
                     else:
                         response = MSG_STRING.NO_REMINDER_REMOVE
                 data.update({'list_slots': list_slots})
@@ -238,7 +241,7 @@ class ConversationService(BaseService):
                 if len(items) != 0:
                     response = 'I found {} events:'.format(len(items))
                     for i,item in enumerate(items):
-                        if i <= 3:
+                        if i < 3:
                             response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
                 else:
                     response = "I didn't found the events."
@@ -265,7 +268,10 @@ class ConversationService(BaseService):
                             else:
                                 response = "Which event do you want to remove?"
                                 for i, item in enumerate(results):
-                                    response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
+                                    if i < 3:
+                                        response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
+                                    else:
+                                        break
                     else:
                         response = MSG_STRING.NO_EVENTS_REMOVE
                 data.update({'list_slots': list_slots})
@@ -288,7 +294,7 @@ class ConversationService(BaseService):
                         event = service.events().update(calendarId='primary',
                                                      eventId=kwargs.get('object_id', None), body=event).execute()
                         list_slots.append(json.dumps(event))
-                        response = 'I renamed reminder about {0} to {1}'.format(event.get('summary', '(No title)'), old_name)
+                        response = 'I renamed event about {0} to {1}'.format(event.get('summary', '(No title)'), old_name)
                         ApiAIService.del_contents(user_id)
                     else:
                         response = "What's the new name?"
