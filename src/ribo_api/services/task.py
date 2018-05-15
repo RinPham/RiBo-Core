@@ -128,7 +128,7 @@ class TaskService(BaseService):
     @classmethod
     def render_reminder_str(cls, index, data, tz):
         str_reminder = False
-        index = str(index)
+        index = str(index+1)
         at_time = Utils.utc_to_local(datetime.strptime(data['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz)
         time = at_time.strftime('%I:%M %p')
         if data['repeat'] == TypeRepeat.NONE:

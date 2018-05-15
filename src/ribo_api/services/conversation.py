@@ -242,7 +242,7 @@ class ConversationService(BaseService):
                     response = 'I found {} events:'.format(len(items))
                     for i,item in enumerate(items):
                         if i < 3:
-                            response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
+                            response += "\n {0}. ".format(str(i+1)) + EventService.render_event_str(item, tz)
                 else:
                     response = "I didn't found the events."
                 data.update({'list_slots': list_slots})
@@ -269,7 +269,7 @@ class ConversationService(BaseService):
                                 response = "Which event do you want to remove?"
                                 for i, item in enumerate(results):
                                     if i < 3:
-                                        response += "\n {0}. ".format(i) + EventService.render_event_str(item, tz)
+                                        response += "\n {0}. ".format(str(i+1)) + EventService.render_event_str(item, tz)
                                     else:
                                         break
                     else:
