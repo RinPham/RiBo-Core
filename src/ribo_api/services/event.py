@@ -45,8 +45,8 @@ class EventService(BaseService):
     def render_event_str(cls, data, tz):
         str_reminder = False
         recurrence = data.get('recurrence', [])
-        start_datetime = Utils.utc_to_local(datetime.strptime(data['start']['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S'), tz)
-        end_datetime = Utils.utc_to_local(datetime.strptime(data['end']['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S'), tz)
+        start_datetime = datetime.strptime(data['start']['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S')
+        end_datetime = datetime.strptime(data['end']['dateTime'][:-6], '%Y-%m-%dT%H:%M:%S')
         start_time = start_datetime.strftime('%I:%M %p')
         end_time = end_datetime.strftime('%I:%M %p')
         if not recurrence:

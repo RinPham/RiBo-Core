@@ -15,6 +15,7 @@ class TaskService(BaseService):
 
     @classmethod
     def create_task(cls, data, **kwargs):
+        result = []
         at_times = data.get("at_time", [])
         recurrences = data.get('recurrence', '')
         data['repeat'] = TypeRepeat.NONE
@@ -32,8 +33,10 @@ class TaskService(BaseService):
             data['at_time'] = at_time
             serializer = TaskSerializer(data=data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
-        return serializer.data
+            task = serializer.save()
+            result.append(task)
+        result = TaskSerializer(list(result), many=True).data
+        return result
 
     @classmethod
     def get_task(cls,data, **kwargs):
@@ -126,23 +129,25 @@ class TaskService(BaseService):
         return q
 
     @classmethod
-    def render_reminder_str(cls, index, data, tz):
+    def render_reminder_str(cls, data, tz):
         str_reminder = False
-        index = str(index+1)
-        at_time = Utils.utc_to_local(datetime.strptime(data['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz)
+        try:
+            at_time = Utils.utc_to_local(datetime.strptime(data['at_time'], '%Y-%m-%dT%H:%M:%SZ'), tz)
+        except ValueError:
+            at_time = Utils.utc_to_local(datetime.strptime(data['at_time'], '%Y-%m-%dT%H:%M:%S%z'), tz)
         time = at_time.strftime('%I:%M %p')
         if data['repeat'] == TypeRepeat.NONE:
             at_time = Utils.utc_to_local_str(data['at_time'], tz)
-            str_reminder = MSG_STRING.REMINDER_ITEM_NOREPEAT.format(str(index), data['title'], at_time)
+            str_reminder = MSG_STRING.REMINDER_ITEM_NOREPEAT.format( data['title'], at_time)
         elif data['repeat'] == TypeRepeat.DAILY:
-            str_reminder = MSG_STRING.REMINDER_ITEM_DAILY.format(str(index), data['title'], time)
+            str_reminder = MSG_STRING.REMINDER_ITEM_DAILY.format(data['title'], time)
         elif data['repeat'] == TypeRepeat.WEEKLY:
             day_of_week = weekday_str[at_time.strftime('%a')]
-            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKLY.format(str(index), data['title'], time, day_of_week)
+            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKLY.format(data['title'], time, day_of_week)
         elif data['repeat'] == TypeRepeat.WEEKENDS:
-            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKENDS.format(str(index), data['title'], time)
+            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKENDS.format(data['title'], time)
         elif data['repeat'] == TypeRepeat.WEEKDAYS:
-            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKDAYS.format(str(index), data['title'], time)
+            str_reminder = MSG_STRING.REMINDER_ITEM_WEEKDAYS.format(data['title'], time)
         elif data['repeat'] == TypeRepeat.MONTHLY:
             day_of_month = str(at_time.day)
             if day_of_month[-1] == '1':
@@ -153,7 +158,7 @@ class TaskService(BaseService):
                 day_of_month = day_of_month + 'rd'
             else:
                 day_of_month = day_of_month + 'th'
-            str_reminder = MSG_STRING.REMINDER_ITEM_MONTHLY.format(str(index), data['title'], time, day_of_month)
+            str_reminder = MSG_STRING.REMINDER_ITEM_MONTHLY.format(data['title'], time, day_of_month)
         return str_reminder
 
     @classmethod
@@ -176,6 +181,7 @@ class TaskService(BaseService):
             task.type = data.get('type', TaskType.NONE)
             task.done = data.get('done', False)
             task.save()
+            task = Task.objects(id=task.id)[0]
             return task
         except Exception as e:
             Utils.log(e)

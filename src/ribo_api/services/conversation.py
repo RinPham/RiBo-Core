@@ -141,7 +141,10 @@ class ConversationService(BaseService):
                     list_slots = []
                     task_data['recurrence'] = recurrences
                     result = TaskService.create_task(data=task_data)
-                    list_slots.append(json.dumps(dict(result)))
+                    response = "I've just added your reminder: "
+                    for item in result:
+                        response += "\n" + TaskService.render_reminder_str(item, tz)
+                        list_slots.append(json.dumps(dict(item)))
                     finish = True
                     data.update({'list_slots': list_slots})
             elif action == 'reminders.get':
@@ -153,7 +156,7 @@ class ConversationService(BaseService):
                     for i,item in enumerate(results):
                         list_slots.append(json.dumps(dict(item)))
                         if i < 3:
-                            response += TaskService.render_reminder_str(i, item, tz)
+                            response += "\n {0}. ".format(str(i+1)) + TaskService.render_reminder_str(item, tz)
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
@@ -231,6 +234,7 @@ class ConversationService(BaseService):
                     event_data['summary'] = name
                 if date_time_1 and date_time_2 and name:
                     event = EventService.create_event(event_data)
+                    response = "I've just scheduled your event: " + EventService.render_event_str(event, tz)
                     list_slots.append(json.dumps(event))
                 data.update({'list_slots': list_slots})
             elif action == 'events.get':

@@ -15,12 +15,12 @@ class MSG_STRING(const):
     EVENT_ITEM_MONTHLY = '{0} starts at {1} to {2} every the {3} of the month'
 
     #reminder
-    REMINDER_ITEM_NOREPEAT = '\n {0}. {1} on {2}'
-    REMINDER_ITEM_DAILY = '\n {0}. {1} at {2} everyday'
-    REMINDER_ITEM_WEEKLY = '\n {0}. {1} at {2} every {3}'
-    REMINDER_ITEM_WEEKENDS = '\n {0}. {1} at {2} every weekends'
-    REMINDER_ITEM_WEEKDAYS = '\n {0}. {1} at {2} every weekdays'
-    REMINDER_ITEM_MONTHLY = '\n {0}. {1} at {2} every the {3} of the month'
+    REMINDER_ITEM_NOREPEAT = '{0} on {1}'
+    REMINDER_ITEM_DAILY = '{0} at {1} everyday'
+    REMINDER_ITEM_WEEKLY = '{0} at {1} every {2}'
+    REMINDER_ITEM_WEEKENDS = '{0} at {1} every weekends'
+    REMINDER_ITEM_WEEKDAYS = ' {0} at {1} every weekdays'
+    REMINDER_ITEM_MONTHLY = '{0} at {1} every the {2} of the month'
 
     #remove reminder
     NO_REMINDER_REMOVE = 'There are nothing to delete!'
