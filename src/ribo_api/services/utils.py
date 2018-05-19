@@ -480,6 +480,7 @@ class Utils:
                 try:
                     date_time = datetime.strptime(date_time, '%H:%M:%S')
                     date_time = datetime.combine(datetime.today(), date_time.time())
+                    return date_time
                 except ValueError as e:
                     raise e
         local_dt = tz.localize(date_time, is_dst=None)
