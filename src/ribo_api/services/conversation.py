@@ -434,7 +434,7 @@ class ConversationService(BaseService):
         timeMin = ''
         date_time = params.get('date-time', [])
         name = params.get('name', '').lower()
-        location = params.get('location', '')
+        location = params.get('location', '').lower()
         if date_time:
             if len(date_time) == 1:
                 if '/' in date_time[0]:
@@ -472,9 +472,9 @@ class ConversationService(BaseService):
         if (name or location) and _temp_items:
             for item in _temp_items:
                 is_remove = False
-                if name and item['summary'].lower() != name:
+                if name and (name not in item['summary'].lower()):
                     items.remove(item)
                     is_remove = True
-                if not is_remove and location and item['location'] != location:
+                if not is_remove and location and (location not in item['location'].lower()):
                     items.remove(item)
         return items
