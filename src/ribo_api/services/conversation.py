@@ -2,7 +2,6 @@ import json
 import random
 
 import pytz
-from boto.beanstalk import response
 from django.db import transaction
 from django.utils import timezone
 import datetime
@@ -19,8 +18,6 @@ from ribo_api.services.task import TaskService
 from ribo_api.services.utils import Utils
 from ribo_api.string import MSG_STRING
 from dateutil import parser
-
-from ribo_core.utilstz import get_local_time
 
 
 class ConversationService(BaseService):

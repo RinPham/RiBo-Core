@@ -455,14 +455,14 @@ class Utils:
         return protocol + public_base + path
 
     @classmethod
-    def next_weekday(cls, weekday, date=datetime.today()):
+    def next_weekday(cls, weekday, date=datetime.now(tz=pytz.timezone('Asia/Bangkok')).date()):
         day_gap = weekday - date.weekday()
         if day_gap <= 0:
             day_gap += 7
         return (date + timedelta(days=day_gap))
 
     @classmethod
-    def last_weekday(cls, weekday, date=datetime.today()):
+    def last_weekday(cls, weekday, date=datetime.now(tz=pytz.timezone('Asia/Bangkok')).date()):
         day_gap = weekday - date.weekday()
         if day_gap >= 0:
             day_gap -= 7
@@ -479,7 +479,10 @@ class Utils:
             except ValueError:
                 try:
                     date_time = datetime.strptime(date_time, '%H:%M:%S')
-                    date_time = datetime.combine(datetime.today(), date_time.time())
+                    if date_time.time() <= datetime.now(tz=tz).time():
+                        date_time = datetime.combine(datetime.now(tz=tz).date(), date_time.time()) + timedelta(days=1)
+                    else:
+                        date_time = datetime.combine(datetime.now(tz=tz).date(), date_time.time())
                     if is_event:
                         return date_time
                 except ValueError as e:
