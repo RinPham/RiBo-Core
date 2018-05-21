@@ -1,7 +1,6 @@
 from ribo_api.const import weekday_str
 from ribo_api.services.base import BaseService
 from ribo_api.services.oauth import OauthService
-from ribo_api.services.utils import Utils
 from datetime import datetime
 
 from ribo_api.string import MSG_STRING
