@@ -439,19 +439,19 @@ class ConversationService(BaseService):
             if len(date_time) == 1:
                 if '/' in date_time[0]:
                     timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
-                                                   tz)
+                                                   tz, True)
                     timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0], start=True),
-                                                   tz)
+                                                   tz, True)
                 else:
                     timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
-                                                    tz) + datetime.timedelta(minutes=1))
+                                                    tz, True) + datetime.timedelta(minutes=1))
                     timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=True),
-                                                   tz)
+                                                   tz, True)
             elif len(date_time) == 2:
                 timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
-                                                tz)
+                                                tz, True)
                 timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[1], start=True),
-                                               tz)
+                                               tz, True)
 
             if timeMax < timeMin:
                 timeMax, timeMin = timeMin, timeMax

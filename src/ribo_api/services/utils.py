@@ -469,7 +469,7 @@ class Utils:
         return (date + timedelta(days=day_gap))
 
     @classmethod
-    def parse_datetime(cls,date_time, tz):
+    def parse_datetime(cls,date_time, tz, is_event=False):
         try:
             date_time = datetime.strptime(date_time, '%Y-%m-%dT%H:%M:%SZ')
         except ValueError:
@@ -480,7 +480,8 @@ class Utils:
                 try:
                     date_time = datetime.strptime(date_time, '%H:%M:%S')
                     date_time = datetime.combine(datetime.today(), date_time.time())
-                    return date_time
+                    if is_event:
+                        return date_time
                 except ValueError as e:
                     raise e
         local_dt = tz.localize(date_time, is_dst=None)
