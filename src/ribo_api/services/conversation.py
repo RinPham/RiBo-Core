@@ -270,13 +270,24 @@ class ConversationService(BaseService):
                     event = service.events().get(calendarId='primary', eventId=kwargs.get('object_id', None)).execute()
                     list_slots.append(json.dumps(event))
                     response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(event, tz))
+                    action = 'events.remove.confirm'
                 elif event_id:
                     event = service.events().get(calendarId='primary', eventId=event_id).execute()
                     if event:
                         list_slots.append(json.dumps(event))
                         response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(event, tz))
+                        action = 'events.remove.confirm'
                     else:
                         response = 'This event was removed!'
+                elif intent_info['intentName'] == 'events.get - remove':
+                    list_choose = params.get('number', [])
+                    response = "Do you want to delete?"
+                    for index_choose in list_choose:
+                        event_id = json.loads(message.slots[index_choose-1]).get('id','')
+                        if event_id:
+                            event = service.events().get(calendarId='primary', eventId=event_id).execute()
+                            list_slots.append(json.dumps(event))
+                            response += "\n "+ EventService.render_event_str(event, tz)
                 else:
                     results = cls.get_events(params, user_id, tz)
                     if results:
@@ -284,10 +295,12 @@ class ConversationService(BaseService):
                             list_slots.append(json.dumps(item))
                         if all and not (params.get('date-time', '') or params.get('name', '')):
                             response = MSG_STRING.REMOVE_ALL_EVENTS_CONFIRM
+                            action = 'events.remove.confirm'
                         else:
                             if len(results) == 1:
                                 list_slots = [json.dumps(results[0])]
                                 response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(results[0], tz))
+                                action = 'events.remove.confirm'
                             else:
                                 response = "Which event do you want to remove?"
                                 for i, item in enumerate(results):
@@ -424,7 +437,7 @@ class ConversationService(BaseService):
     @classmethod
     def process_confirm_yes(cls, message):
         response = ''
-        if message.action == 'reminders.remove':
+        if message.action == 'reminders.remove.confirm':
             for item in message.slots:
                 try:
                     data = json.loads(item)
@@ -433,7 +446,7 @@ class ConversationService(BaseService):
                 except Exception:
                     pass
             response = 'I removed it'
-        elif message.action == 'events.remove':
+        elif message.action == 'events.remove.confirm':
             service = OauthService._get_service(message.user_id)
             for item in message.slots:
                 try:
