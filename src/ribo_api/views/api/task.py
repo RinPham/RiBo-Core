@@ -88,6 +88,45 @@ class TaskViewSet(ViewSet):
             Utils.log_exception(e)
             raise e
 
+    def retrieve(self, request, pk, *args, **kwargs):
+        """
+        @apiVersion 1.0.0
+        @api {GET} /task/:id_task GET task detail
+        @apiName TaskDetail
+        @apiGroup Ribo_api Task
+        @apiPermission Authentication
+
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
+        {
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
+        }
+
+        @apiSuccess {object} task
+        @apiSuccessExample {json}
+        {
+            "id": "5afaa0db012a0f738baadc69",
+            "created_at": "2018-05-23T02:20:55.121546Z",
+            "updated_at": "2018-05-23T02:20:55.121319Z",
+            "title": "go to school",
+            "user_id": "5aefc23e012a0f2c6211bc33",
+            "at_time": "2018-05-16T01:00:00Z",
+            "type": 0,
+            "done": false,
+            "repeat": 0,
+        }
+        """
+        try:
+            if pk:
+                task = Task.objects(id=pk)[0]
+                serializer = self.serializer_class(task)
+                return Response(serializer.data)
+            else:
+                raise Response({'msg': "Id task is required"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            Utils.log_exception(e)
+            raise e
+
     def update(self, request, pk, *args, **kwargs):
         """
         @apiVersion 1.0.0

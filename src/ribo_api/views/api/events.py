@@ -107,6 +107,65 @@ class EventViewSet(ViewSet):
         except Exception as e:
             raise e
 
+    def retrieve(self, request, pk, *args, **kwargs):
+        """
+        @apiVersion 1.0.0
+        @api {GET} /event/:id Get event
+        @apiName EventDetail
+        @apiGroup Ribo_api Event
+        @apiPermission Authentication
+
+        @apiHeader {string} Authorization format: token <token_string>
+        @apiHeaderExample {json} Request Header Example:
+        {
+            "Authorization": "token QL7RXWUJKDIISITBDLPRUPQZAXD81XYEHZ4HPL5J"
+        }
+
+        @apiSuccess {object} event
+        @apiSuccessExample {json}
+        {
+            "etag": "\"3052586445079000\"",
+            "summary": "quoc 1",
+            "id": "sej95gr6ruggsf6013pe3s7q2s",
+            "end": {
+                "dateTime": "2018-05-14T18:20:11+07:00",
+                "timeZone": "UTC"
+            },
+            "htmlLink": "https://www.google.com/calendar/event?eid=c2VqOTVncjZydWdnc2Y2MDEzcGUzczdxMnMgdGhxYm9wMUBt",
+            "created": "2018-05-14T10:20:22.000Z",
+            "status": "confirmed",
+            "creator": {
+                "self": true,
+                "email": "thqbop1@gmail.com"
+            },
+            "updated": "2018-05-14T10:20:22.646Z",
+            "kind": "calendar#event",
+            "reminders": {
+                "useDefault": false
+            },
+            "organizer": {
+                "self": true,
+                "email": "thqbop1@gmail.com"
+            },
+            "start": {
+                "dateTime": "2018-05-14T17:20:11+07:00",
+                "timeZone": "UTC"
+            },
+            "description": "Notes",
+            "iCalUID": "sej95gr6ruggsf6013pe3s7q2s@google.com",
+            "sequence": 0
+        }
+        """
+        try:
+            user = self.request.user
+            service = OauthService._get_service(user.id)
+            items = service.events().get(calendarId='primary', eventId=pk).execute()
+            return Response(items)
+        except AccessTokenCredentialsError as e:
+            raise TokenExpired()
+        except Exception as e:
+            raise e
+
     def create(self, request, *args, **kwargs):
         """
         @apiVersion 1.0.0
