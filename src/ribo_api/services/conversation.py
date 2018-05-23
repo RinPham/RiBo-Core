@@ -157,6 +157,7 @@ class ConversationService(BaseService):
                     data.update({'list_slots':list_slots})
                 else:
                     response = MSG_STRING.NO_REMINDER
+                    ApiAIService.del_contents(user_id)
             elif action == 'reminders.remove':
                 list_slots = []
                 all = params.get('all', False)
@@ -164,16 +165,35 @@ class ConversationService(BaseService):
                 if intent_info['intentName'] == 'reminders.add - remove':
                     task_item = json.loads(message.slots[0])
                     task_id = task_item.get('id','')
-                if kwargs.get('object_id', None) and not all:
-                    task = Task.objects(id=kwargs.get('object_id'), user_id=user_id)[0]
-                    list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
-                    at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
-                    response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(task.title, at_time)
+                if (intent_info['intentName'] == 'reminders.get - remove') or (intent_info['intentName'] == 'reminders.remove - select.number'):
+                    numbers = params.get('number', [])
+                    has_task = False
+                    for number in numbers:
+                        if number > len(message.slots):
+                            continue
+                        task_id = json.loads(message.slots[number - 1]).get('id', '')
+                        task = Task.objects(id=task_id, user_id=user_id)
+                        if len(task) > 0:
+                            has_task = True
+                            task = task[0]
+                            list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                            at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
+                            response += "\n " + task.title + " on "+ at_time
+                    if has_task:
+                        response = "Do you want to delete the reminders?" + response
+                        action = "reminders.remove.confirm"
+                    else:
+                        response = "The reminders was removed!"
                 elif task_id:
-                    task = Task.objects(id=task_id)[0]
-                    list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
-                    at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
-                    response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(task.title, at_time)
+                    task = Task.objects(id=task_id)
+                    if len(task) > 0:
+                        task = task[0]
+                        list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                        at_time = Utils.utc_to_local(task.at_time, tz).strftime('%b %d, %Y at %I:%M %p')
+                        response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(task.title, at_time)
+                        action = "reminders.remove.confirm"
+                    else:
+                        response = "This event was removed!"
                 else:
                     query_data = cls.prepare_query(user_id, params,tz)
                     results = TaskService.get_task(query_data, exclude_done=True, tz=tz)
@@ -182,11 +202,13 @@ class ConversationService(BaseService):
                             list_slots.append(json.dumps(dict(item)))
                         if all and not (params.get('date-time', '') or params.get('name', '')):
                             response = MSG_STRING.REMOVE_ALL_REMINDER_CONFIRM
+                            action = "reminders.remove.confirm"
                         else:
                             if len(results) == 1:
                                 list_slots = [json.dumps(dict(results[0]))]
                                 at_time = Utils.utc_to_local_str(results[0]['at_time'], tz)
                                 response = MSG_STRING.REMOVE_REMINDER_CONFIRM.format(results[0]['title'], at_time)
+                                action = "reminders.remove.confirm"
                             else:
                                 response = "Which reminder do you want to remove?"
                                 for i, item in enumerate(results):
@@ -196,6 +218,7 @@ class ConversationService(BaseService):
                                         break
                     else:
                         response = MSG_STRING.NO_REMINDER_REMOVE
+                        ApiAIService.del_contents(user_id)
                 data.update({'list_slots': list_slots})
             elif action == 'reminders.rename':
                 list_slots = []
@@ -257,6 +280,7 @@ class ConversationService(BaseService):
                             break
                 else:
                     response = "I didn't found the events."
+                    ApiAIService.del_contents(user_id)
                 data.update({'list_slots': list_slots})
             elif action == 'events.remove':
                 list_slots = []
@@ -266,12 +290,7 @@ class ConversationService(BaseService):
                     event_item = json.loads(message.slots[0])
                     event_id = event_item.get('id','')
                 service = OauthService._get_service(user_id)
-                if kwargs.get('object_id', None) and not all:
-                    event = service.events().get(calendarId='primary', eventId=kwargs.get('object_id', None)).execute()
-                    list_slots.append(json.dumps(event))
-                    response = MSG_STRING.REMOVE_EVENTS_CONFIRM.format(EventService.render_event_str(event, tz))
-                    action = 'events.remove.confirm'
-                elif event_id:
+                if event_id:
                     event = service.events().get(calendarId='primary', eventId=event_id).execute()
                     if event:
                         list_slots.append(json.dumps(event))
@@ -279,15 +298,23 @@ class ConversationService(BaseService):
                         action = 'events.remove.confirm'
                     else:
                         response = 'This event was removed!'
-                elif intent_info['intentName'] == 'events.get - remove':
+                elif (intent_info['intentName'] == 'events.get - remove') or (intent_info['intentName'] == 'events.remove - select.number'):
                     list_choose = params.get('number', [])
-                    response = "Do you want to delete?"
+                    has_event = False
                     for index_choose in list_choose:
+                        if index_choose > len(message.slots):
+                            continue
                         event_id = json.loads(message.slots[index_choose-1]).get('id','')
                         if event_id:
+                            has_event = True
                             event = service.events().get(calendarId='primary', eventId=event_id).execute()
                             list_slots.append(json.dumps(event))
                             response += "\n "+ EventService.render_event_str(event, tz)
+                    if has_event:
+                        response += "Do you want to delete?" + response
+                        action = 'events.remove.confirm'
+                    else:
+                        response = 'This event was removed!'
                 else:
                     results = cls.get_events(params, user_id, tz)
                     if results:
