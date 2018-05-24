@@ -395,7 +395,16 @@ class ConversationService(BaseService):
                             response = "I didn't found the event."
                 data.update({'list_slots': list_slots})
         elif action == 'ask-free-time':
-            pass
+            list_slots = []
+            items = cls.get_events(params,user_id,tz)
+            if items:
+                response = "You have "+str(len(items))+" event:"
+                for item in items:
+                    response += "\n "+ EventService.render_event_str(item,tz)
+                    list_slots.append(json.dumps(item))
+            else:
+                response = "You are free on this time"
+            data.update({'list_slots': list_slots})
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':
@@ -454,7 +463,10 @@ class ConversationService(BaseService):
         date = params.get('date-time', '')
         name = params.get('name', '')
         time_period = params.get('time-period','')
-        if '/' in date:
+        date_period = params.get('date_period','')
+        if '/' in date or date_period:
+            if date_period:
+                date = date_period
             query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[0], start=True),
                                                               tz).strftime('%Y-%m-%dT%H:%M:%SZ')
             query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date.split('/')[1], start=False),
@@ -462,9 +474,17 @@ class ConversationService(BaseService):
         elif date:
             try:
                 datetime.datetime.strptime(date, '%Y-%m-%d')
-                query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True),
-                                                                  tz).strftime('%Y-%m-%dT%H:%M:%SZ')
-                query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False),
+                if time_period:
+                    date_1 = date +"T"+time_period.split('/')[0]+"Z"
+                    date_2 = date +"T"+time_period.split('/')[1]+"Z"
+                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date_1),
+                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date_2),
+                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                else:
+                    query_data['at_time__gte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=True),
+                                                                      tz).strftime('%Y-%m-%dT%H:%M:%SZ')
+                    query_data['at_time__lte'] = Utils.parse_datetime(cls.prepare_query_date(date, start=False),
                                                                   tz).strftime('%Y-%m-%dT%H:%M:%SZ')
             except ValueError:
                 query_data['at_time'] = Utils.parse_datetime(cls.prepare_query_date(date), tz).strftime(
@@ -501,27 +521,36 @@ class ConversationService(BaseService):
         service = OauthService._get_service(user_id)
         timeMax = ''
         timeMin = ''
-        date_time = params.get('date-time', [])
+        date_time = params.get('date-time', '')
         name = params.get('name', '').lower()
         location = params.get('location', '').lower()
+        date_period = params.get('date-period', '')
+        time_period = params.get('time-period', '')
+        if date_period:
+            date_time = date_period
         if date_time:
-            if len(date_time) == 1:
-                if '/' in date_time[0]:
-                    timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[1], start=False),
-                                                   tz, True)
-                    timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0].split('/')[0], start=True),
-                                                   tz, True)
-                else:
-                    timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
-                                                    tz, True) + datetime.timedelta(minutes=1))
-                    timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=True),
-                                                   tz, True)
-            elif len(date_time) == 2:
-                timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time[0], start=False),
-                                                tz, True)
-                timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time[1], start=True),
+            if '/' in date_time:
+                timeMax = Utils.parse_datetime(cls.prepare_query_date(date_time.split('/')[1], start=False),
                                                tz, True)
-
+                timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time.split('/')[0], start=True),
+                                               tz, True)
+            else:
+                if time_period:
+                    try:
+                        datetime.datetime.strptime(date_time,'%Y-%m-%d')
+                        date_time_1 = date_time +"T"+time_period.split('/')[0]+"Z"
+                        date_time_2 = date_time +"T"+time_period.split('/')[1]+"Z"
+                        timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time_1, start=False),
+                                                        tz, True) + datetime.timedelta(minutes=1))
+                        timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time_2, start=True),
+                                                       tz, True)
+                    except ValueError as e:
+                        raise Exception("I can't not look up with this informations!")
+                else:
+                    timeMax = (Utils.parse_datetime(cls.prepare_query_date(date_time, start=False),
+                                                    tz, True) + datetime.timedelta(minutes=1))
+                    timeMin = Utils.parse_datetime(cls.prepare_query_date(date_time, start=True),
+                                                   tz, True)
             if timeMax < timeMin:
                 timeMax, timeMin = timeMin, timeMax
             timeMax = timeMax.strftime('%Y-%m-%dT%H:%M:%S%z')
