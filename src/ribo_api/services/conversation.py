@@ -25,7 +25,7 @@ class ConversationService(BaseService):
     @classmethod
     def load_messages(cls, user_id, **kwargs):
         limit = kwargs.get("limit",20)
-        page = kwargs.get("page",0)
+        page = Utils.safe_int(kwargs.get("page",0))
         offset = limit*page
         messages = Message.objects(user_id=user_id).order_by("-id")[offset:offset+limit]
         if not messages:
@@ -224,26 +224,33 @@ class ConversationService(BaseService):
                 list_slots = []
                 old_name = params.get('old-name', '')
                 new_name = params.get('name', '')
-                if kwargs.get('object_id', None):
-                    if old_name:
-                        task = Task.objects(id=kwargs.get('object_id'))[0]
-                        cur_name = task.title
-                        task.title = old_name
-                        task.save()
-                        list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
-                        response = 'I renamed reminder about {0} to {1}'.format(cur_name, old_name)
-                        ApiAIService.del_contents(user_id)
-                    else:
-                        response = "What's the new name?"
-                else:
-                    if old_name and new_name:
-                        task = Task.objects(title__icontains=old_name, user_id=user_id)
-                        if task:
+                if intent_info['intentName'] == 'reminders.add - rename':
+                    if new_name:
+                        task_item = json.loads(message.slots[0])
+                        task_id = task_item.get('id', '')
+                        task = Task.objects(id=task_id)
+                        if len(task):
                             task = task[0]
+                            cur_name = task.title
                             task.title = new_name
                             task.save()
                             list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
-                            response = 'I renamed reminder about {0} to {1}'.format(old_name,new_name)
+                            response = 'I renamed reminder about {0} to {1}'.format(cur_name, new_name)
+                            ApiAIService.del_contents(user_id)
+                        else:
+                            response = "This reminder was deleted!"
+                    else:
+                        list_slots = message.slots
+                else:
+                    if old_name:
+                        task = Task.objects(title__icontains=old_name, user_id=user_id)
+                        if task:
+                            if new_name:
+                                task = task[0]
+                                task.title = new_name
+                                task.save()
+                                list_slots.append(json.dumps(dict(TaskSerializer(task).data)))
+                                response = 'I renamed reminder about {0} to {1}'.format(old_name,new_name)
                         else:
                             response = "I didn't found the reminder."
                 data.update({'list_slots': list_slots})
@@ -343,10 +350,12 @@ class ConversationService(BaseService):
                 old_name = params.get('old-name', '')
                 new_name = params.get('name', '')
                 service = OauthService._get_service(user_id)
-                if kwargs.get('object_id', None):
-                    if old_name:
+                if intent_info['intentName'] == 'events.add - rename':
+                    if new_name:
+                        event_item = json.loads(message.slots[0])
+                        event_id = event_item.get('id', '')
                         event = {
-                            'summary': old_name,
+                            'summary': new_name,
                             'start': {
                                 'dateTime': None
                             },
@@ -355,32 +364,33 @@ class ConversationService(BaseService):
                             }
                         }
                         event = service.events().update(calendarId='primary',
-                                                     eventId=kwargs.get('object_id', None), body=event).execute()
+                                                     eventId=event_id, body=event).execute()
                         list_slots.append(json.dumps(event))
-                        response = 'I renamed event about {0} to {1}'.format(event.get('summary', '(No title)'), old_name)
+                        response = 'I renamed event about {0} to {1}'.format(event.get('summary', '(No title)'), new_name)
                         ApiAIService.del_contents(user_id)
                     else:
-                        response = "What's the new name?"
+                        list_slots = message.slots
                 else:
-                    if old_name and new_name:
+                    if old_name:
                         events = cls.get_events(params={'name':old_name}, user_id=user_id, tz=tz)
                         if events:
-                            for event in events:
-                                event_id = event.get('id', None)
-                                event_data = {
-                                    'summary': new_name,
-                                    'start': {
-                                        'dateTime': event['start']['dateTime']
-                                    },
-                                    'end': {
-                                        'dateTime': event['end']['dateTime']
+                            if new_name:
+                                for event in events:
+                                    event_id = event.get('id', None)
+                                    event_data = {
+                                        'summary': new_name,
+                                        'start': {
+                                            'dateTime': event['start']['dateTime']
+                                        },
+                                        'end': {
+                                            'dateTime': event['end']['dateTime']
+                                        }
                                     }
-                                }
-                                event = service.events().update(calendarId='primary',
-                                                                eventId=event_id,
-                                                                body=event_data).execute()
-                                list_slots.append(json.dumps(event))
-                            response = 'I renamed events about {0} to {1}'.format(old_name, new_name)
+                                    event = service.events().update(calendarId='primary',
+                                                                    eventId=event_id,
+                                                                    body=event_data).execute()
+                                    list_slots.append(json.dumps(event))
+                                response = 'I renamed events about {0} to {1}'.format(old_name, new_name)
                         else:
                             response = "I didn't found the event."
                 data.update({'list_slots': list_slots})

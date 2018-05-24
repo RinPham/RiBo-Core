@@ -25,7 +25,8 @@ class MessageViewSet(ViewSet):
         }
 
         @apiParam {string} user_id
-        @apiParam {string} body
+        @apiParam {int} page
+        @apiParam {int} limit Optional
 
         @apiSuccess {object[]} messages
         @apiSuccessExample {json}
@@ -50,7 +51,8 @@ class MessageViewSet(ViewSet):
         """
         try:
             user = self.request.user
-            messages = ConversationService.load_messages(user.id)
+            data = request.GET.copy()
+            messages = ConversationService.load_messages(user.id, data)
             return Response(messages)
         except Exception as e:
             Utils.log_exception(e)
