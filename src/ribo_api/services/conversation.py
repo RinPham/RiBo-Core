@@ -394,6 +394,8 @@ class ConversationService(BaseService):
                         else:
                             response = "I didn't found the event."
                 data.update({'list_slots': list_slots})
+        elif action == 'ask-free-time':
+            pass
         elif action == 'confirmation.yes':
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':

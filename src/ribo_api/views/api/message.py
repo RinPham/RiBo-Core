@@ -52,7 +52,7 @@ class MessageViewSet(ViewSet):
         try:
             user = self.request.user
             data = request.GET.copy()
-            messages = ConversationService.load_messages(user.id, data)
+            messages = ConversationService.load_messages(user.id, kwargs=data)
             return Response(messages)
         except Exception as e:
             Utils.log_exception(e)
