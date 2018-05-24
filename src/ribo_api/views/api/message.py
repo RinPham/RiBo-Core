@@ -25,7 +25,7 @@ class MessageViewSet(ViewSet):
         }
 
         @apiParam {string} user_id
-        @apiParam {int} page
+        @apiParam {int} offset
         @apiParam {int} limit Optional
 
         @apiSuccess {object[]} messages

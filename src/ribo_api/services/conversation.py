@@ -25,8 +25,7 @@ class ConversationService(BaseService):
     @classmethod
     def load_messages(cls, user_id, **kwargs):
         limit = kwargs.get("limit",20)
-        page = Utils.safe_int(kwargs.get("page",0))
-        offset = limit*page
+        offset = Utils.safe_int(kwargs.get("offset",0))
         messages = Message.objects(user_id=user_id).order_by("-id")[offset:offset+limit]
         if not messages:
             message = Message()
