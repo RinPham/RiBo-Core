@@ -104,9 +104,6 @@ class ConversationService(BaseService):
         fulfillment = ai_result['fulfillment']
         response = fulfillment.get('speech','')
         intent_info = ai_result['metadata']
-        if 'cancel' in text.lower():
-            ApiAIService.del_contents(user_id)
-            action = 'confirmation.no'
         result = None
         finish = False
         data = {}
@@ -408,6 +405,9 @@ class ConversationService(BaseService):
             response = cls.process_confirm_yes(message)
         elif action == 'confirmation.no':
             response = 'OK'
+            ApiAIService.del_contents(user_id)
+        elif action == 'action.cancel':
+            response = 'Cancelled'
             ApiAIService.del_contents(user_id)
         data.update({
             'action': action,
