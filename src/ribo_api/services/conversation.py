@@ -27,7 +27,7 @@ class ConversationService(BaseService):
         limit = kwargs.get("limit",20)
         offset = Utils.safe_int(kwargs.get("offset",0))
         messages = Message.objects(user_id=user_id).order_by("-id")[offset:offset+limit]
-        if not messages:
+        if not messages and offset == 0:
             message = Message()
             message['user_id'] = user_id
             message.content = ContentMessage(question_text='Hello, Can I help you with something?', answer_text='',
