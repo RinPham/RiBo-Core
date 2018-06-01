@@ -159,9 +159,16 @@ class ConversationService(BaseService):
                 all = params.get('all', False)
                 task_id = False
                 if intent_info['intentName'] == 'reminders.add - remove':
-                    task_item = json.loads(message.slots[0])
-                    task_id = task_item.get('id','')
-                if (intent_info['intentName'] == 'reminders.get - remove') or (intent_info['intentName'] == 'reminders.remove - select.number'):
+                    try:
+                        task_item = json.loads(message.slots[0])
+                        task_id = task_item.get('id','')
+                    except Exception:
+                        message_temp = Message.objects(user_id=user_id).order_by("-id")[1]
+                        task_item = json.loads(message_temp.slots[0])
+                        task_id = task_item.get('id', '')
+                if (intent_info['intentName'] == 'reminders.get - remove') \
+                    or (intent_info['intentName'] == 'reminders.remove - select.number') \
+                        or (intent_info['intentName'] == 'reminders.add - remove - select.number'):
                     numbers = params.get('number', [])
                     has_task = False
                     for number in numbers:
@@ -221,9 +228,16 @@ class ConversationService(BaseService):
                 old_name = params.get('old-name', '')
                 new_name = params.get('name', '')
                 if intent_info['intentName'] == 'reminders.add - rename':
-                    if new_name:
+                    slot_temp = None
+                    try:
                         task_item = json.loads(message.slots[0])
                         task_id = task_item.get('id', '')
+                    except Exception:
+                        message_temp = Message.objects(user_id=user_id).order_by("-id")[1]
+                        task_item = json.loads(message_temp.slots[0])
+                        task_id = task_item.get('id', '')
+                        slot_temp = message_temp.slots
+                    if new_name:
                         task = Task.objects(id=task_id)
                         if len(task):
                             task = task[0]
@@ -236,7 +250,11 @@ class ConversationService(BaseService):
                         else:
                             response = "This reminder was deleted!"
                     else:
-                        list_slots = message.slots
+                        if slot_temp:
+                            list_slots = slot_temp
+                        else:
+                            list_slots = message.slots
+
                 else:
                     if old_name:
                         task = Task.objects(title__icontains=old_name, user_id=user_id)
